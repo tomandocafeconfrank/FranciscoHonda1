@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Francisco Virtual Honda - OS 2026 V4 + Cerebro Honda</title>
+<title>Francisco Asistente Virtual Honda - OS 2026 V4 + Cerebro Honda</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:#0a0a0a;color:#fff;font-family:Inter,system-ui,sans-serif;height:100vh;display:flex;flex-direction:column;overflow:hidden}
@@ -220,6 +220,13 @@ function hondaTopic(text,model){
       out += "• "+v[0]+"\n  "+v[1]+"\n  "+v[2]+"\n\n";
     });
     return out.trim();
+  }
+  // Honda SENSING: primero respondemos qué es, antes de mandar al bloque de seguridad.
+  if(n.includes("que es el sensing") || n.includes("que es honda sensing") || n.includes("que es sensing") || n.includes("que significa sensing") || n.includes("para que sirve sensing")){
+    if(model === "BR-V"){
+      return "Honda SENSING es el conjunto de asistencias de conducción que el cerebro maestro registra para la BR-V Touring. No es una sola función, sino varias asistencias que apoyan al conductor.\n\nEn BR-V Touring están registradas: ACC, Auto High Beam, LKAS, CMBS y RDM.\n\nDicho fácil: es el paquete de asistencias de Honda. Si quieres, te explico una por una qué hace ACC, LKAS, CMBS y RDM.";
+    }
+    return "Honda SENSING es el conjunto de asistencias de conducción de Honda. Para este modelo, el archivo maestro confirma su disponibilidad, pero no tengo aquí el desglose completo de funciones. Prefiero no inventarte una explicación específica que no esté validada.";
   }
   if(n.includes("segur") || n.includes("sensing") || n.includes("airbag") || n.includes("bolsa") || n.includes("fcw") || n.includes("cmbs") || n.includes("acc") || n.includes("lkas") || n.includes("rdm")){
     return d.seguridad;
