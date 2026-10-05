@@ -1,999 +1,359 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Francisco Virtual | Honda Angelópolis</title>
-
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    :root {
-      --bg: #090909;
-      --panel: #111111;
-      --panel-2: #181818;
-      --border: #292929;
-      --text: #ffffff;
-      --muted: #a7a7a7;
-      --honda: #e10600;
-      --green: #22c55e;
-    }
-
-    body {
-      min-height: 100vh;
-      background: var(--bg);
-      color: var(--text);
-      font-family: Inter, Arial, Helvetica, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .app {
-      width: 100%;
-      max-width: 1100px;
-      height: 92vh;
-      max-height: 850px;
-      display: flex;
-      flex-direction: column;
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      overflow: hidden;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, .45);
-    }
-
-    /* HEADER */
-    header {
-      height: 68px;
-      padding: 0 22px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-bottom: 1px solid var(--border);
-      background: #101010;
-      flex-shrink: 0;
-    }
-
-    .brand {
-      font-size: 15px;
-      font-weight: 800;
-      letter-spacing: .4px;
-    }
-
-    .brand span {
-      color: var(--honda);
-    }
-
-    .online {
-      color: var(--green);
-      font-size: 12px;
-      border: 1px solid rgba(34, 197, 94, .3);
-      background: rgba(34, 197, 94, .08);
-      padding: 6px 10px;
-      border-radius: 20px;
-    }
-
-    /* CHAT */
-    .chat {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      min-height: 0;
-    }
-
-    .messages {
-      flex: 1;
-      overflow-y: auto;
-      padding: 26px;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      background:
-        radial-gradient(circle at 20% 0%, rgba(225, 6, 0, .10), transparent 34%),
-        var(--bg);
-    }
-
-    .message {
-      max-width: 78%;
-      padding: 13px 16px;
-      border-radius: 16px;
-      font-size: 14px;
-      line-height: 1.55;
-      white-space: pre-wrap;
-      animation: appear .18s ease-out;
-    }
-
-    .assistant {
-      align-self: flex-start;
-      background: var(--panel-2);
-      border: 1px solid var(--border);
-      border-bottom-left-radius: 5px;
-    }
-
-    .user {
-      align-self: flex-end;
-      background: var(--honda);
-      border-bottom-right-radius: 5px;
-    }
-
-    @keyframes appear {
-      from {
-        opacity: 0;
-        transform: translateY(5px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    /* OPTIONS */
-    .optionsArea {
-      border-top: 1px solid var(--border);
-      background: #101010;
-      padding: 16px;
-      flex-shrink: 0;
-    }
-
-    .optionHint {
-      color: var(--muted);
-      font-size: 12px;
-      margin-bottom: 10px;
-    }
-
-    .options {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .option {
-      appearance: none;
-      border: 1px solid #363636;
-      background: #1a1a1a;
-      color: #fff;
-      border-radius: 12px;
-      padding: 11px 14px;
-      font-size: 13px;
-      cursor: pointer;
-      transition: .18s ease;
-    }
-
-    .option:hover {
-      border-color: var(--honda);
-      background: #202020;
-      transform: translateY(-1px);
-    }
-
-    .option.primary {
-      background: var(--honda);
-      border-color: var(--honda);
-    }
-
-    .option.secondary {
-      color: #d2d2d2;
-    }
-
-    .restart {
-      margin-top: 10px;
-      background: transparent;
-      border: 0;
-      color: #777;
-      font-size: 11px;
-      cursor: pointer;
-      padding: 4px;
-    }
-
-    .restart:hover {
-      color: #fff;
-    }
-
-    /* MOBILE */
-    @media (max-width: 650px) {
-      body {
-        align-items: stretch;
-      }
-
-      .app {
-        height: 100vh;
-        max-height: none;
-        border-radius: 0;
-        border: 0;
-      }
-
-      header {
-        padding: 0 15px;
-      }
-
-      .messages {
-        padding: 18px 14px;
-      }
-
-      .message {
-        max-width: 90%;
-      }
-
-      .optionsArea {
-        padding: 12px;
-      }
-
-      .option {
-        width: 100%;
-        text-align: left;
-      }
-    }
-  </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Francisco Virtual Honda - OS 2026 V4 + Cerebro Honda</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0a0a;color:#fff;font-family:Inter,system-ui,sans-serif;height:100vh;display:flex;flex-direction:column;overflow:hidden}
+header{padding:16px 24px;border-bottom:1px solid #222;display:flex;justify-content:space-between;align-items:center;background:#111;flex-shrink:0}
+header h1{font-size:16px;letter-spacing:1px} header h1 span{color:#e10600}
+.status{font-size:12px;color:#22c55e;background:#22c55e22;border:1px solid #22c55e44;padding:4px 10px;border-radius:20px}
+.main{flex:1;display:flex;overflow:hidden}
+.left{width:280px;min-width:280px;border-right:1px solid #222;background:#0f0f0f;padding:12px;overflow-y:auto}
+.left h3{font-size:11px;opacity:.5;margin:16px 0 8px;letter-spacing:1px;text-transform:uppercase}
+.btn{display:block;width:100%;text-align:left;padding:11px 12px;margin:5px 0;background:#1a1a1a;border:1px solid #222;border-radius:10px;color:#fff;cursor:pointer;font-size:13px;transition:.2s}
+.btn:hover{background:#222;border-color:#e10600;transform:translateX(2px)}
+.chat{flex:1;display:flex;flex-direction:column;background:radial-gradient(600px at 20% 10%, #1a0000 0%, #0a0a0a 60%);min-width:0}
+.messages{flex:1;overflow-y:auto;padding:24px;display:flex;flex-direction:column;gap:14px}
+.msg{max-width:75%;padding:12px 16px;border-radius:16px;font-size:14px;line-height:1.5;word-wrap:break-word}
+.user{align-self:flex-end;background:#e10600;color:#fff;border-bottom-right-radius:4px;box-shadow:0 2px 8px #e1060044}
+.assistant{align-self:flex-start;background:#1e1e1e;border:1px solid #2a2a2a;border-bottom-left-radius:4px;white-space:pre-wrap}
+.inputArea{padding:12px;border-top:1px solid #222;display:flex;gap:8px;background:#111;flex-shrink:0}
+.inputArea input{flex:1;background:#1a1a1a;border:1px solid #333;border-radius:10px;padding:12px 14px;color:#fff;outline:none;font-size:14px}
+.inputArea input:focus{border-color:#e10600}
+.inputArea button{background:#e10600;border:none;border-radius:10px;padding:0 20px;color:#fff;font-weight:700;cursor:pointer;transition:.2s}
+.right{width:300px;min-width:300px;border-left:1px solid #222;background:#0f0f0f;padding:16px;overflow-y:auto}
+.card{background:#161616;border:1px solid #222;border-radius:12px;padding:12px;margin-bottom:12px}
+.card h4{font-size:11px;opacity:.6;margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px}
+.json{font-family:monospace;font-size:11px;background:#000;padding:10px;border-radius:8px;color:#22c55e;overflow:auto;border:1px solid #1a1a1a}
+.badge{display:inline-block;background:#222;border:1px solid #333;padding:3px 9px;border-radius:20px;font-size:11px;margin:3px 2px}
+.badge.active{background:#e1060022;border-color:#e10600;color:#ffb3b0}
+</style>
 </head>
-
 <body>
+<header>
+<h1>Francisco García | <span>Honda Angelópolis</span> - OS 2026 V4 + Cerebro Honda</h1>
+<div class="status">● Online - Asistente de Francisco</div>
+</header>
+<div class="main">
+<div class="left">
+<h3>Escenarios de prueba</h3>
+<button class="btn" onclick="sim('Hola')">👋 Hola</button>
+<button class="btn" onclick="sim('Quiero una CR-V')">🚙 Quiero una CR-V</button>
+<button class="btn" onclick="sim('MENSUALIDAD, ESPACIO Y SEGURIDAD')">✅ MENSUALIDAD, ESPACIO Y SEGURIDAD</button>
+<button class="btn" onclick="sim('me interesa saber costos')">💰 me interesa saber costos</button>
+<button class="btn" onclick="sim('Qué significa FCW?')">❓ FCW?</button>
 
-  <main class="app">
+<h3>Cerebro Honda</h3>
+<button class="btn" onclick="selectHondaModel('CITY')">🚗 City</button>
+<button class="btn" onclick="selectHondaModel('CIVIC')">🚘 Civic</button>
+<button class="btn" onclick="selectHondaModel('HR-V')">🚙 HR-V</button>
+<button class="btn" onclick="selectHondaModel('BR-V')">👨‍👩‍👧‍👦 BR-V</button>
+<button class="btn" onclick="selectHondaModel('CR-V')">🛋️ CR-V</button>
+<button class="btn" onclick="selectHondaModel('ACCORD')">👔 Accord</button>
 
-    <header>
-      <div class="brand">
-        Francisco García | <span>Honda Angelópolis</span>
-      </div>
-
-      <div class="online">
-        ● Francisco Virtual
-      </div>
-    </header>
-
-    <section class="chat">
-
-      <div id="messages" class="messages"></div>
-
-      <div class="optionsArea">
-        <div class="optionHint" id="optionHint">
-          Selecciona una opción para continuar 👇🏻
-        </div>
-
-        <div id="options" class="options"></div>
-
-        <button class="restart" onclick="reiniciar()">
-          ↻ Empezar de nuevo
-        </button>
-      </div>
-
-    </section>
-
-  </main>
-
-
+<h3>Estado</h3>
+<div class="card"><h4>Prioridades detectadas</h4><div id="prio"></div></div>
+<div class="card"><h4>Personas</h4><div id="pers"></div></div>
+<div class="card"><h4>Debug JSON</h4><div id="json" class="json">{}</div></div>
+</div>
+<div class="chat">
+<div id="messages" class="messages"></div>
+<div class="inputArea">
+<input id="input" placeholder="Escribe... ej: Hola, quiero una CR-V" onkeydown="if(event.key==='Enter')send()"/>
+<button onclick="send()">Enviar</button>
+</div>
+</div>
+<div class="right">
+<div class="card"><h4>Perfil detectado</h4><div id="perfil">-</div></div>
+<div class="card"><h4>Técnica FRANCO</h4><div id="tecnica">-</div></div>
+<div class="card"><h4>Próximo paso</h4><div id="next">Inicia conversación</div></div>
+<div class="card" style="border-color:#22c55e"><h4 style="color:#22c55e">MENSAJE NUEVO V4</h4><div style="font-size:12px;line-height:1.4">✅ Amigable<br/>✅ Asistente personal de Francisco<br/>✅ No invasivo<br/>✅ Anti-precios + entiende typos</div></div>
+</div>
+</div>
 <script>
+let state={prioridades:[], personas:[], modelo:null};
+const msgs=document.getElementById('messages');
+function addMsg(text,who){ const d=document.createElement('div'); d.className='msg '+who; d.textContent=text; msgs.appendChild(d); msgs.scrollTop=msgs.scrollHeight; }
+function normaliza(t){
+  return t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9 ]/g, " ").replace(/\s+/g, " ").trim();
+}
+function parsePrioridades(t){
+  const n = normaliza(t);
+  const found=[];
+  if(n.includes("mensua") || n.includes("mnsua") || n.includes("mensial")) found.push("mensualidad");
+  if(n.includes("espac") || n.includes("ezpac") || n.includes("espas")) found.push("espacio");
+  if(n.includes("segur") || n.includes("sequr")) found.push("seguridad");
+  if(n.includes("rendim") || n.includes("rinde") || n.includes("consum") || n.includes("gasolina")) found.push("rendimiento");
+  if(n.includes("equip") || n.includes("pantalla")) found.push("equipamiento");
+  return [...new Set(found)].slice(0,3);
+}
+function detectPersonas(t){
+  const n = normaliza(t);
+  const p=[];
+  if(n.includes("bebe")) p.push("bebé");
+  if(n.includes("familia")) p.push("familia");
+  if(n.includes("hija")) p.push("hija");
+  if(n.includes("hijo")) p.push("hijo");
+  return [...new Set(p)];
+}
+function updateUI(){
+  document.getElementById('prio').innerHTML = state.prioridades.length? state.prioridades.map(x=>`<span class="badge active">${x.toUpperCase()}</span>`).join('') : '<span style="opacity:.4">-</span>';
+  document.getElementById('pers').innerHTML = state.personas.length? state.personas.map(x=>`<span class="badge">${x}</span>`).join('') : '<span style="opacity:.4">vacío</span>';
+  document.getElementById('json').textContent = JSON.stringify(state,null,2);
+}
 
-/*
-=========================================================
- FRANCISCO VIRTUAL
- PARTE 1 | EXPERIENCIA GUIADA
-=========================================================
-
-OBJETIVO DE ESTA PARTE:
-
-Crear una experiencia sencilla donde el cliente NO
-necesita escribir.
-
-El cliente principalmente selecciona opciones.
-
-Esta versión NO incluye todavía:
-
-- Cerebro Honda completo
-- Fichas técnicas
-- Diferencias entre versiones
-- Precios reales
-- Promociones
-- WhatsApp
-- Notion
-- CRM
-- IA externa
-
-Eso pertenece a la PARTE 2.
-
-=========================================================
-*/
-
-
-/* ------------------------------------------------------
-   ESTADO DEL CLIENTE
------------------------------------------------------- */
-
-const cliente = {
-
-  tipoVehiculo: null,
-
-  uso: null,
-
-  pasajeros: null,
-
-  prioridad: null,
-
-  modeloSugerido: null
-
+// ============================================================
+// CEREBRO HONDA - PARTE 2 INTEGRADA
+// Basado en el archivo maestro Honda OS validado que cargamos.
+// Si un dato no está en el cerebro, NO se inventa.
+// ============================================================
+const DATA = {
+"CR-V":{
+  intro:"5 pasajeros. La CR-V 2026 tiene versiones Turbo y Hybrid.",
+  versions:[
+    ["Turbo Plus","FWD · 1.5L Turbo · 188 hp · 177 lb-pie · CVT · 16.6 km/l","Rines 18\" · carga 1,113 L · sin sensores de estacionamiento"],
+    ["Touring","FWD · 1.5L Turbo · 188 hp · 177 lb-pie · CVT","Rines 19\" · sensores delanteros y traseros · BOSE 12 bocinas · rieles · apertura manos libres"],
+    ["Touring HEV","FWD · híbrido 2 motores · 204 hp · 247 lb-pie · E-CVT · 23.3 km/l","Carga 983 L · kit de reparación"],
+    ["Sport Touring HEV","AWD · híbrido · 204 hp · 247 lb-pie · E-CVT","Híbrido + AWD para mayor adherencia y viajes"]
+  ],
+  seguridad:"El cerebro registra diferencias de equipamiento por versión. En CR-V, Touring agrega sensores delanteros y traseros; Sport Touring HEV añade AWD. Para funciones concretas de Honda SENSING que no estén descritas aquí, prefiero validarlas antes de afirmarlas.",
+  rendimiento:"Turbo: 16.6 km/l combinado. Hybrid: 23.3 km/l combinado.",
+  motor:"Turbo: 1.5 L Turbo, 188 hp, 177 lb-pie, CVT. Hybrid: sistema híbrido de dos motores, 204 hp, 247 lb-pie, E-CVT.",
+  compare:"Turbo Plus vs Touring: misma base Turbo, Touring sube equipamiento. Touring HEV cambia a híbrido. Sport Touring HEV mantiene el sistema híbrido y agrega AWD.",
+  competition:"Turbo: Sportage, Tucson, X-Trail y CX-5. Hybrid: RAV4 HEV, Sportage Híbrida, Tucson Híbrida y X-Trail e-POWER."
+},
+"CITY":{
+  intro:"5 pasajeros. Motor 1.5 L i-VTEC® de 119 hp y 107 lb-pie, CVT, FWD, 20.8 km/l y cajuela de 519 L.",
+  versions:[
+    ["Sport CVT","1.5L · 119 hp · 107 lb-pie · CVT · FWD","A/C manual · 4 bocinas · rines 16\""],
+    ["Prime CVT","1.5L · 119 hp · 107 lb-pie · CVT · FWD","Pantalla 8\" · 8 bocinas · CarPlay/Android Auto inalámbricos · Smart Entry · LaneWatch · cámara 3 ángulos"],
+    ["Touring CVT","1.5L · 119 hp · 107 lb-pie · CVT · FWD","Honda SENSING · piel sintética · pantalla 8\" · 8 bocinas · Smart Entry · LaneWatch · cámara 3 ángulos"]
+  ],
+  seguridad:"Las tres versiones comparten 6 bolsas, VSA, ABS, EBD, TPMS y otras funciones indicadas en el cerebro? Ese detalle no está desarrollado para City en el archivo maestro, así que no voy a rellenarlo. Lo que sí está validado aquí es que Touring agrega Honda SENSING y Prime/Touring incluyen LaneWatch y cámara de 3 ángulos.",
+  rendimiento:"20.8 km/l combinado.",
+  motor:"1.5L i-VTEC®, 119 hp, 107 lb-pie, CVT, Paddle Shifters y FWD.",
+  compare:"Sport prioriza acceso funcional. Prime sube conectividad y comodidad. Touring añade Honda SENSING y piel sintética.",
+  competition:"Versa, Yaris Sedán, K3 Sedán y Mazda2 Sedán."
+},
+"BR-V":{
+  intro:"7 pasajeros. 1.5L, 119 hp, 107 lb-pie, CVT, FWD y 17.1 km/l. Carga: 244 L con 3 filas, 530 L con tercera abatida y 1,032 L con segunda y tercera abatidas.",
+  versions:[
+    ["UNIQ","1.5L · 119 hp · 107 lb-pie · CVT · FWD","Rines 16\" · tela · 4 bocinas · Smart Entry sin botón · sin SENSING"],
+    ["Touring","1.5L · 119 hp · 107 lb-pie · CVT · FWD","Rines 17\" · Paddle Shifters · piel sintética · 6 bocinas · Smart Entry + botón · SENSING · LaneWatch · 4 sensores traseros"]
+  ],
+  seguridad:"Ambas versiones tienen 6 bolsas de aire. Touring agrega Honda SENSING, LaneWatch y 4 sensores traseros. El cerebro también registra ACC, Auto High Beam, LKAS, CMBS y RDM dentro de SENSING en Touring.",
+  rendimiento:"17.1 km/l combinado.",
+  motor:"1.5L, 119 hp, 107 lb-pie, CVT, FWD.",
+  compare:"UNIQ: 7 lugares y equipamiento funcional. Touring: misma mecánica, pero añade seguridad activa, sensores, Paddle Shifters, piel sintética y acabados.",
+  competition:"Xpander/Cross, Creta Grand, Ertiga XL7 BoosterGreen y Avanza."
+},
+"CIVIC":{
+  intro:"5 pasajeros y cajuela de 419 L. Hay una opción 2.0L gasolina y opciones híbridas de dos motores.",
+  versions:[
+    ["i-Style","2.0L · 150 hp · 133 lb-pie · CVT · 20.1 km/l","Rines 17\" · pantalla 9\" · 8 bocinas · tela · tanque 46.9 L"],
+    ["Sport HEV","Híbrido 2 motores · 200 hp · 232 lb-pie · E-CVT · 29.8 km/l","Rines 18\" · quemacocos · clima doble zona · tela + piel · 8 bocinas"],
+    ["Touring HEV","Híbrido 2 motores · 200 hp · 232 lb-pie · E-CVT · 29.8 km/l","Sensores delanteros y traseros · BOSE 12 · MID 10.2\" · cargador inalámbrico · cajuela eléctrica · asiento eléctrico"]
+  ],
+  seguridad:"Honda SENSING está indicado en toda la gama. Touring HEV agrega sensores delanteros y traseros.",
+  rendimiento:"i-Style: 20.1 km/l. Sport HEV y Touring HEV: 29.8 km/l.",
+  motor:"i-Style: 2.0L gasolina, 150 hp, 133 lb-pie, CVT. Sport/Touring HEV: híbrido de 2 motores, 200 hp, 232 lb-pie, E-CVT y paletas de regeneración.",
+  compare:"i-Style: entrada con motor convencional. Sport HEV: salto a híbrido con rendimiento y desempeño. Touring HEV: misma mecánica híbrida, con mayor equipamiento y comodidad.",
+  competition:"Gasolina: Sentra, Mazda3 y K4. Híbridos: Elantra Híbrido y Corolla HEV."
+},
+"ACCORD":{
+  intro:"Accord 2026: única versión Touring HEV. Híbrido de 204 hp y 247 lb-pie, E-CVT y 26.1 km/l combinado.",
+  versions:[
+    ["Touring HEV","Híbrido · 204 hp · 247 lb-pie · E-CVT · 26.1 km/l","Honda SENSING · pantalla 12.3\" · BOSE 12 · Head-Up Display · rines 19\""]
+  ],
+  seguridad:"La versión Touring HEV incluye Honda SENSING según el cerebro maestro. Para una función específica que no esté desglosada aquí, la validaría antes de afirmarla.",
+  rendimiento:"26.1 km/l combinado. Es un HEV y no necesita conectarse.",
+  motor:"Sistema híbrido: motor gasolina 2.0L + motor eléctrico de tracción. Potencia neta 204 hp y torque neto 247 lb-pie. E-CVT. Modos Normal, Sport, ECON e Individual.",
+  compare:"No hay una escalera de versiones en Accord 2026 dentro del cerebro: la gama indicada es una sola Touring HEV.",
+  competition:"Camry HEV como rival directo. BYD New King como alternativa PHEV con un patrón de uso distinto. Altima aparece solo como referencia histórica, no como rival vigente."
+},
+"HR-V":{
+  intro:"5 pasajeros. Motor 2.0L de 155 hp y 136 lb-pie, CVT, Paddle Shifters, FWD y Honda SENSING de serie en UNIQ, Sport y Touring.",
+  versions:[
+    ["UNIQ","2.0L · 155 hp · 136 lb-pie · CVT · FWD · SENSING","Rines 17\" · 4 bocinas · tela · clima auto · One Push Start · sin quemacocos, cargador, Smart Entry ni sensores"],
+    ["Sport","2.0L · 155 hp · 136 lb-pie · CVT · FWD · SENSING","Rines negros 18\" · quemacocos · 8 bocinas · cargador · Smart Entry · encendido remoto · piel perforada · sin sensores"],
+    ["Touring","2.0L · 155 hp · 136 lb-pie · CVT · FWD · SENSING","Rines 18\" · asiento eléctrico 8 vías · clima doble zona · espejo auto · iluminación ambiental · 8 sensores"]
+  ],
+  seguridad:"Honda SENSING está indicado de serie en las tres versiones. Touring agrega 8 sensores. El archivo maestro no desglosa en esta sección todas las funciones SENSING, así que no voy a inventarlas.",
+  rendimiento:"El archivo maestro consultado no proporciona una cifra de km/l para HR-V. Sí registra tanque de 57 L y carga de 691 L hasta 1,560 L abatida.",
+  motor:"2.0L, 155 hp, 136 lb-pie, CVT, Paddle Shifters y FWD.",
+  compare:"UNIQ: entrada con seguridad SENSING. Sport: sube diseño, conectividad y comodidad. Touring: añade asiento eléctrico, clima doble zona, espejo auto, iluminación ambiental y 8 sensores.",
+  competition:"El archivo maestro consultado no incluye una matriz de competidores para HR-V."
+}
 };
 
-
-/* ------------------------------------------------------
-   ELEMENTOS
------------------------------------------------------- */
-
-const messages = document.getElementById("messages");
-const options = document.getElementById("options");
-const optionHint = document.getElementById("optionHint");
-
-
-/* ------------------------------------------------------
-   UTILIDADES
------------------------------------------------------- */
-
-function mensaje(texto, tipo = "assistant") {
-
-  const elemento = document.createElement("div");
-
-  elemento.className = `message ${tipo}`;
-
-  elemento.textContent = texto;
-
-  messages.appendChild(elemento);
-
-  messages.scrollTop = messages.scrollHeight;
+function detectHondaModel(text){
+  const n=normaliza(text).replace(/ /g,"");
+  if(n.includes("crv")) return "CR-V";
+  if(n.includes("hrv")) return "HR-V";
+  if(n.includes("brv")) return "BR-V";
+  if(n.includes("civic")) return "CIVIC";
+  if(n.includes("city")) return "CITY";
+  if(n.includes("accord")) return "ACCORD";
+  return null;
 }
 
-
-function mostrarOpciones(lista) {
-
-  options.innerHTML = "";
-
-  lista.forEach((opcion) => {
-
-    const boton = document.createElement("button");
-
-    boton.className = "option";
-
-    if (opcion.primary) {
-      boton.classList.add("primary");
-    }
-
-    if (opcion.secondary) {
-      boton.classList.add("secondary");
-    }
-
-    boton.textContent = opcion.label;
-
-    boton.onclick = () => {
-
-      mensaje(opcion.label, "user");
-
-      setTimeout(() => {
-
-        opcion.accion();
-
-      }, 220);
-
-    };
-
-    options.appendChild(boton);
-
-  });
-
+function selectHondaModel(model){
+  state.modelo=model;
+  document.getElementById('perfil').textContent="Modelo: "+model;
+  document.getElementById('tecnica').textContent="Cerebro Honda activo";
+  document.getElementById('next').textContent="Puedes preguntar por versiones, seguridad, rendimiento o motor";
+  updateUI();
+  addMsg("Perfecto. Vamos con "+model+".\n\n"+DATA[model].intro,"assistant");
+  addMsg("¿Qué quieres revisar?","assistant");
+  addMsg("🔎 Versiones\n🛡️ Seguridad\n⛽ Rendimiento\n⚙️ Motor / transmisión\n⚖️ Diferencias entre versiones\n🥊 Competencia","assistant");
 }
 
-
-function siguiente(texto, lista) {
-
-  mensaje(texto);
-
-  mostrarOpciones(lista);
-
+function hondaTopic(text,model){
+  const d=DATA[model];
+  const n=normaliza(text);
+  if(n.includes("versi") || n.includes("equip") || n.includes("que trae") || n.includes("diferencia")){
+    let out="Estas son las versiones de "+model+":\n\n";
+    d.versions.forEach(v=>{
+      out += "• "+v[0]+"\n  "+v[1]+"\n  "+v[2]+"\n\n";
+    });
+    return out.trim();
+  }
+  if(n.includes("segur") || n.includes("sensing") || n.includes("airbag") || n.includes("bolsa") || n.includes("fcw") || n.includes("cmbs") || n.includes("acc") || n.includes("lkas") || n.includes("rdm")){
+    return d.seguridad;
+  }
+  if(n.includes("rendim") || n.includes("consum") || n.includes("km/l") || n.includes("km l") || n.includes("gasta") || n.includes("gasolina")){
+    return d.rendimiento;
+  }
+  if(n.includes("motor") || n.includes("hp") || n.includes("caballo") || n.includes("torque") || n.includes("lb-pie") || n.includes("transm") || n.includes("cvt") || n.includes("e-cvt") || n.includes("hibrid")){
+    return d.motor;
+  }
+  if(n.includes("compar") || n.includes("vs") || n.includes("contra") || n.includes("conviene")){
+    return d.compare;
+  }
+  if(n.includes("compet") || n.includes("rival") || n.includes("versa") || n.includes("yaris") || n.includes("sportage") || n.includes("tucson") || n.includes("camry") || n.includes("mazda") || n.includes("k3") || n.includes("sentra")){
+    return d.competition;
+  }
+  return null;
 }
 
-
-/* ------------------------------------------------------
-   INICIO
------------------------------------------------------- */
-
-function iniciar() {
-
-  messages.innerHTML = "";
-
-  cliente.tipoVehiculo = null;
-  cliente.uso = null;
-  cliente.pasajeros = null;
-  cliente.prioridad = null;
-  cliente.modeloSugerido = null;
-
-  optionHint.textContent =
-    "Selecciona una opción para continuar 👇🏻";
-
-  siguiente(
-    `¡Hola! 👋🏻 Soy el asistente virtual de Francisco, de Honda Angelópolis.
-
-Estoy aquí para ayudarte a conocer los Honda sin enredos y sin aventarte el catálogo completo de golpe 😂
-
-¿Qué traes en mente?`,
-    [
-      {
-        label: "🚙 Quiero una camioneta",
-        primary: true,
-        accion: elegirCamioneta
-      },
-      {
-        label: "🚗 Quiero un auto",
-        accion: elegirAuto
-      },
-      {
-        label: "💰 Quiero conocer precios",
-        accion: conocerPrecios
-      },
-      {
-        label: "🔄 Quiero cambiar mi auto",
-        accion: cambiarAuto
-      },
-      {
-        label: "🤔 Solo estoy viendo",
-        accion: soloEstoyViendo
-      }
-    ]
-  );
-}
-
-
-/* ------------------------------------------------------
-   CAMIONETA
------------------------------------------------------- */
-
-function elegirCamioneta() {
-
-  cliente.tipoVehiculo = "camioneta";
-
-  siguiente(
-    `Va 👌🏻
-
-Para recomendarte algo que realmente tenga sentido, dime:
-
-¿Para qué la necesitas principalmente?`,
-    [
-      {
-        label: "👨‍👩‍👧‍👦 Familia",
-        accion: elegirFamilia
-      },
-      {
-        label: "🏙️ Uso diario",
-        accion: usoDiario
-      },
-      {
-        label: "🛣️ Viajes / carretera",
-        accion: usoCarretera
-      },
-      {
-        label: "💼 Trabajo",
-        accion: usoTrabajo
-      }
-    ]
-  );
-}
-
-
-/* ------------------------------------------------------
-   AUTO
------------------------------------------------------- */
-
-function elegirAuto() {
-
-  cliente.tipoVehiculo = "auto";
-
-  siguiente(
-    `Va, vamos a aterrizarlo. 👌🏻
-
-¿Para qué lo usarías principalmente?`,
-    [
-      {
-        label: "🏙️ Uso diario",
-        accion: usoDiario
-      },
-      {
-        label: "👨‍👩‍👧‍👦 Familia",
-        accion: elegirFamilia
-      },
-      {
-        label: "🛣️ Viajes / carretera",
-        accion: usoCarretera
-      },
-      {
-        label: "✨ Quiero algo más equipado",
-        accion: prioridadEquipamiento
-      }
-    ]
-  );
-}
-
-
-/* ------------------------------------------------------
-   USOS
------------------------------------------------------- */
-
-function usoDiario() {
-
-  cliente.uso = "diario";
-
-  siguiente(
-    `Perfecto, principalmente para uso diario. 👌🏻
-
-Ahora dime qué te importa más en tu próximo Honda:`,
-    opcionesPrioridad()
-  );
-}
-
-
-function usoCarretera() {
-
-  cliente.uso = "carretera";
-
-  siguiente(
-    `Va, entonces la carretera sí es importante. 🛣️
-
-¿Qué quieres priorizar?`,
-    opcionesPrioridad()
-  );
-}
-
-
-function usoTrabajo() {
-
-  cliente.uso = "trabajo";
-
-  siguiente(
-    `Perfecto. Si va a trabajar contigo, quiero que prioricemos lo que realmente vas a aprovechar. 👌🏻
-
-¿Qué te importa más?`,
-    opcionesPrioridad()
-  );
-}
-
-
-/* ------------------------------------------------------
-   FAMILIA
------------------------------------------------------- */
-
-function elegirFamilia() {
-
-  siguiente(
-    `Perfecto. 👌🏻
-
-¿Cuántas personas viajan normalmente contigo?`,
-    [
-      {
-        label: "👤 2-3 personas",
-        accion: pasajeros3
-      },
-      {
-        label: "👨‍👩‍👧‍👦 4-5 personas",
-        accion: pasajeros5
-      },
-      {
-        label: "👨‍👩‍👧‍👦 6-7 personas",
-        accion: pasajeros7
-      }
-    ]
-  );
-}
-
-
-function pasajeros3() {
-
-  cliente.pasajeros = "2-3";
-
-  siguiente(
-    `Perfecto, 2-3 personas. 👌🏻
-
-¿Qué pesa más para ti?`,
-    opcionesPrioridad()
-  );
-}
-
-
-function pasajeros5() {
-
-  cliente.pasajeros = "4-5";
-
-  siguiente(
-    `Va, 4-5 personas. 👌🏻
-
-¿Qué pesa más para ti?`,
-    opcionesPrioridad()
-  );
-}
-
-
-function pasajeros7() {
-
-  cliente.pasajeros = "6-7";
-
-  siguiente(
-    `Va, 6-7 personas. 👌🏻
-
-Aquí sí quiero cuidar mucho el espacio disponible.
-
-¿Qué pesa más para ti?`,
-    opcionesPrioridad()
-  );
-}
-
-
-/* ------------------------------------------------------
-   PRIORIDADES
------------------------------------------------------- */
-
-function opcionesPrioridad() {
-
-  return [
-    {
-      label: "⛽ Que gaste poco",
-      accion: prioridadRendimiento
-    },
-    {
-      label: "🛡️ Seguridad",
-      accion: prioridadSeguridad
-    },
-    {
-      label: "📦 Espacio",
-      accion: prioridadEspacio
-    },
-    {
-      label: "✨ Equipamiento",
-      accion: prioridadEquipamiento
-    },
-    {
-      label: "💰 Cuidar la mensualidad",
-      accion: prioridadMensualidad
-    }
-  ];
-
-}
-
-
-function prioridadRendimiento() {
-
-  cliente.prioridad = "rendimiento";
-
-  recomendar();
-}
-
-
-function prioridadSeguridad() {
-
-  cliente.prioridad = "seguridad";
-
-  recomendar();
-}
-
-
-function prioridadEspacio() {
-
-  cliente.prioridad = "espacio";
-
-  recomendar();
-}
-
-
-function prioridadEquipamiento() {
-
-  cliente.prioridad = "equipamiento";
-
-  recomendar();
-}
-
-
-function prioridadMensualidad() {
-
-  cliente.prioridad = "mensualidad";
-
-  recomendar();
-}
-
-
-/* ------------------------------------------------------
-   RECOMENDACIÓN
-------------------------------------------------------
-
-IMPORTANTE:
-
-Aquí NO estamos inventando precios ni especificaciones.
-
-La recomendación es solamente una primera orientación.
-
-En la PARTE 2 conectaremos el cerebro Honda para que
-pueda explicar versiones, equipamiento y diferencias.
------------------------------------------------------- */
-
-function recomendar() {
-
-  let modelo = "";
-
-  let razon = "";
-
-  if (cliente.tipoVehiculo === "camioneta") {
-
-    if (cliente.pasajeros === "6-7") {
-
-      modelo = "BR-V";
-
-      razon =
-        "por la necesidad de llevar más pasajeros y priorizar espacio familiar";
-
-    } else if (cliente.prioridad === "rendimiento") {
-
-      modelo = "HR-V";
-
-      razon =
-        "porque estás priorizando el uso diario y el consumo";
-
-    } else if (cliente.prioridad === "espacio") {
-
-      modelo = "CR-V";
-
-      razon =
-        "porque el espacio es una de tus prioridades principales";
-
-    } else {
-
-      modelo = "CR-V";
-
-      razon =
-        "porque buscas una camioneta familiar y todavía necesitamos afinar qué versión te conviene";
-
-    }
-
-  } else {
-
-    if (cliente.prioridad === "rendimiento") {
-
-      modelo = "CITY";
-
-      razon =
-        "porque estás priorizando el uso diario y el rendimiento";
-
-    } else {
-
-      modelo = "CIVIC";
-
-      razon =
-        "porque buscas un auto y podemos revisar una opción más completa dentro de la gama";
-
-    }
-
+function botResponse(userText){
+  const n=normaliza(userText);
+  const newPrio=parsePrioridades(userText);
+  const newPers=detectPersonas(userText);
+
+  newPrio.forEach(p=>{ if(!state.prioridades.includes(p)) state.prioridades.push(p); });
+  newPers.forEach(p=>{ if(!state.personas.includes(p)) state.personas.push(p); });
+
+  // Si el cliente menciona un modelo, activamos el cerebro correspondiente.
+  const mentionedModel=detectHondaModel(userText);
+  if(mentionedModel){
+    state.modelo=mentionedModel;
+    document.getElementById('perfil').textContent="Modelo: "+mentionedModel;
+    document.getElementById('tecnica').textContent="Cerebro Honda activo";
   }
 
-  cliente.modeloSugerido = modelo;
+  // ==========================================================
+  // PARTE 2: RESPUESTAS HONDA
+  // ==========================================================
+  if(state.modelo){
+    const hondaResponse=hondaTopic(userText,state.modelo);
 
-  siguiente(
-    `Va, ya tengo una idea mucho más clara de lo que buscas. 👌🏻
-
-Por lo que me dijiste, yo empezaría revisando el ${modelo} ${razon}.
-
-Ojo: esto es una primera orientación, no significa que sea automáticamente la única opción. La idea es comparar antes de decidir.
-
-¿Qué quieres hacer ahora?`,
-    [
-      {
-        label: `🔎 Conocer ${modelo}`,
-        primary: true,
-        accion: conocerModelo
-      },
-      {
-        label: "🔄 Ver otra opción",
-        accion: verOtraOpcion
-      },
-      {
-        label: "💰 Quiero hablar de precio",
-        accion: conocerPrecios
-      }
-    ]
-  );
-
-}
-
-
-/* ------------------------------------------------------
-   MODELO
------------------------------------------------------- */
-
-function conocerModelo() {
-
-  mensaje(
-    `Perfecto. 🚗
-
-Aquí es donde entra la segunda parte del proyecto.
-
-En la siguiente versión, Francisco Virtual podrá explicarte:
-
-• Versiones disponibles
-• Diferencias entre versiones
-• Equipamiento
-• Seguridad
-• Tecnología
-• Características importantes
-• Qué versión podría tener más sentido para lo que buscas
-
-Por ahora estamos probando únicamente el recorrido inicial. 👌🏻`
-  );
-
-  optionHint.textContent =
-    "Parte 1 terminada. Puedes reiniciar para probar otro recorrido.";
-
-  mostrarOpciones([
-    {
-      label: "↻ Probar otra vez",
-      primary: true,
-      accion: reiniciar
+    // No dejar que una pregunta técnica sea atrapada por la lógica
+    // comercial de la Parte 1.
+    if(hondaResponse){
+      updateUI();
+      addMsg(hondaResponse,"assistant");
+      return;
     }
-  ]);
 
+    // Si acaba de mencionar el modelo pero no preguntó algo concreto,
+    // damos entrada al cerebro sin repetir interrogatorios.
+    if(mentionedModel){
+      const d=DATA[state.modelo];
+      updateUI();
+      addMsg("Va, "+state.modelo+".\n\n"+d.intro+"\n\nPuedes preguntarme por versiones, seguridad, rendimiento, motor o diferencias entre versiones.","assistant");
+      return;
+    }
+  }
+
+  let response="";
+
+  // ==========================================================
+  // PARTE 1: ATENCIÓN COMERCIAL
+  // ==========================================================
+  if(n.includes("cost") || n.includes("precio") || n.includes("presio") || n.includes("promoc") || n.includes("promo") || n.includes("descuento") || n.includes("oferta") || n.includes("cuanto cuesta") || n.includes("cuanto vale")){
+    response=`Entiendo que quieras darte una idea de números, y para no darte info que luego cambie, por política de Honda no manejo precios cerrados o promos por aquí, porque varían por versión, color y mes.
+
+Lo que sí puedo hacer es armártelo personalizado y sin compromiso:
+
+1. ¿Qué modelo traes en mente? (CITY, HR-V, BR-V, CR-V, Accord, etc)
+2. ¿Qué enganche tienes contemplado?
+3. ¿A cuántos meses te acomoda?
+
+Con eso le paso el dato a Francisco y te saca tu mensualidad exacta con lo vigente de este mes.
+
+¿Con cuál empezamos?`;
+    document.getElementById('perfil').textContent="Intención: Costos - Bloqueado";
+    document.getElementById('tecnica').textContent="Anti-precio: no inventar";
+  }
+  else if(n.includes("hola") || n.includes("buenas") || n.includes("ola") || n.includes("que tal") || n.includes("buen dia")){
+    response=`¡Hola! Soy el asistente personal de Francisco de Honda Angelópolis 👋
+
+Quiero ayudarte a elegir tu nuevo Honda sin marearte con tecnicismos.
+
+¿Dime qué traes en mente? ¿Buscas algo familiar, para diario, o algo más equipado para carretera?`;
+    document.getElementById('perfil').textContent="Saludo - Nuevo";
+  }
+  else if(n.includes("fcw") || n.includes("cmbs") || n.includes("sensing")){
+    response=`Va. FCW y CMBS forman parte del lenguaje de Honda SENSING, pero la disponibilidad exacta depende del modelo y versión.
+
+Si me dices qué Honda estás viendo, te digo qué tiene registrado el cerebro para esa versión, sin inventarte equipamiento.`;
+    document.getElementById('tecnica').textContent="Seguridad: validar por modelo/versión";
+  }
+  else if(n.includes("crv") || n.includes("quiero una") || n.includes("me interesa") || n.includes("busco camioneta") || n.includes("busco auto")){
+    response=`¡Perfecto! Soy el asistente personal de Francisco y quiero ayudarte a elegir tu nuevo Honda.
+
+Para no mandarte info que no te sirve, ¿me cuentas un poco qué traes en mente?
+
+¿Es más para familia, uso diario, o carretera?`;
+    document.getElementById('perfil').textContent="Interés en modelo";
+  }
+  else if(state.prioridades.length>=2){
+    const lista=state.prioridades.map(p=>p.toUpperCase()).join(", ").replace(/, ([^,]*)$/, " y $1");
+    response=`Perfecto, entonces lo que no negociarías es ${lista}, ¿correcto?
+
+Si tuvieras que ponerlas en orden, ¿cuál pesa más hoy para ti?`;
+  }
+  else if(state.prioridades.length===1){
+    response=`Ok, ${state.prioridades[0].toUpperCase()} es clave para ti.
+
+¿Hay otras 2 que no negociarías además de esa? Entre espacio, seguridad, rendimiento, equipamiento y mensualidad.`;
+  }
+  else{
+    response=`Gracias por compartirlo.
+
+Si tuvieras que decirme 3 cosas que NO negociarías en tu próxima camioneta entre espacio, rendimiento, seguridad, equipamiento y mensualidad, ¿cuáles serían?`;
+  }
+
+  updateUI();
+  addMsg(response,'assistant');
 }
 
+function sim(t){ addMsg(t,'user'); setTimeout(()=>botResponse(t),300); }
+function send(){ const i=document.getElementById('input'); const t=i.value.trim(); if(!t) return; addMsg(t,'user'); i.value=''; setTimeout(()=>botResponse(t),300); }
 
-/* ------------------------------------------------------
-   OTRAS OPCIONES
------------------------------------------------------- */
+// --- NUEVO MENSAJE DE ENTRADA AMIGABLE V4 ---
+const mensajeBienvenida = `Hola, soy el asistente personal de Francisco de Honda Angelópolis 👋
 
-function verOtraOpcion() {
+Quiero ayudarte a elegir tu nuevo Honda sin enredos.
 
-  siguiente(
-    `Claro. 👌🏻
+¿Dime qué traes en mente?`;
 
-Podemos explorar otra opción antes de decidir.`,
-    [
-      {
-        label: "🚙 Ver otra camioneta",
-        accion: elegirCamioneta
-      },
-      {
-        label: "🚗 Ver un auto",
-        accion: elegirAuto
-      },
-      {
-        label: "↻ Empezar desde cero",
-        accion: reiniciar
-      }
-    ]
-  );
-
-}
-
-
-function conocerPrecios() {
-
-  cliente.prioridad = "precio";
-
-  siguiente(
-    `Claro. 💰
-
-Para no darte un precio fuera de contexto, primero quiero saber qué estás buscando.
-
-Así después podemos revisar la opción y versión correctas.`,
-    [
-      {
-        label: "🚙 Camioneta",
-        accion: elegirCamioneta
-      },
-      {
-        label: "🚗 Auto",
-        accion: elegirAuto
-      },
-      {
-        label: "🤷🏻 Todavía no sé",
-        accion: noSeTodavia
-      }
-    ]
-  );
-
-}
-
-
-function noSeTodavia() {
-
-  siguiente(
-    `No pasa nada 😂.
-
-Para eso estoy yo.
-
-Vamos por lo más fácil: ¿qué quieres que haga tu próximo coche?`,
-    opcionesPrioridad()
-  );
-
-}
-
-
-function cambiarAuto() {
-
-  cliente.tipoVehiculo = "cambio";
-
-  siguiente(
-    `Va. Si vas a cambiar tu auto, primero quiero saber qué quieres mejorar.
-
-¿Qué es lo que más te importa cambiar?`,
-    [
-      {
-        label: "⛽ Consumo",
-        accion: prioridadRendimiento
-      },
-      {
-        label: "📦 Espacio",
-        accion: prioridadEspacio
-      },
-      {
-        label: "🛡️ Seguridad",
-        accion: prioridadSeguridad
-      },
-      {
-        label: "✨ Equipamiento",
-        accion: prioridadEquipamiento
-      },
-      {
-        label: "💰 Mensualidad",
-        accion: prioridadMensualidad
-      }
-    ]
-  );
-
-}
-
-
-function soloEstoyViendo() {
-
-  siguiente(
-    `Sin problema. 😄
-
-Aquí nadie te va a corretear para venderte algo.
-
-Puedes conocer opciones con calma y cuando tengas una idea más clara, seguimos desde ahí.`,
-    [
-      {
-        label: "🚙 Ver camionetas",
-        accion: elegirCamioneta
-      },
-      {
-        label: "🚗 Ver autos",
-        accion: elegirAuto
-      },
-      {
-        label: "↻ Empezar de nuevo",
-        accion: reiniciar
-      }
-    ]
-  );
-
-}
-
-
-/* ------------------------------------------------------
-   REINICIAR
------------------------------------------------------- */
-
-function reiniciar() {
-
-  cliente.tipoVehiculo = null;
-  cliente.uso = null;
-  cliente.pasajeros = null;
-  cliente.prioridad = null;
-  cliente.modeloSugerido = null;
-
-  iniciar();
-
-}
-
-
-/* ------------------------------------------------------
-   ARRANQUE
------------------------------------------------------- */
-
-iniciar();
-
+addMsg(mensajeBienvenida,"assistant");
+updateUI();
 </script>
-
 </body>
 </html>
