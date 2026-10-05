@@ -291,7 +291,36 @@ function selectHondaModel(model){
   updateUI();
   addMsg("Perfecto. Vamos con "+model+".\n\n"+DATA[model].intro,"assistant");
   addMsg("¿Qué quieres revisar?","assistant");
-  addMsg("🔎 Versiones\n🛡️ Seguridad\n⛽ Rendimiento\n⚙️ Motor / transmisión\n⚖️ Diferencias entre versiones\n🥊 Competencia","assistant");
+  addChatActions([
+    ["🔎 Versiones",()=>topicButton("versiones")],
+    ["🛡️ Seguridad",()=>topicButton("seguridad")],
+    ["⛽ Rendimiento",()=>topicButton("rendimiento")],
+    ["⚙️ Motor / transmisión",()=>topicButton("motor")],
+    ["⚖️ Diferencias entre versiones",()=>topicButton("comparar")],
+    ["🥊 Competencia",()=>topicButton("competencia")],
+    ["🏠 Volver al inicio",()=>iniciarBienvenida()]
+  ]);
+}
+
+function topicButton(type){
+  if(!state.modelo){ return; }
+  const d=DATA[state.modelo];
+  const labels={
+    versiones:"🔎 Versiones",
+    seguridad:"🛡️ Seguridad",
+    rendimiento:"⛽ Rendimiento",
+    motor:"⚙️ Motor / transmisión",
+    comparar:"⚖️ Diferencias entre versiones",
+    competencia:"🥊 Competencia"
+  };
+  addMsg(labels[type],"user");
+  if(type==="versiones"){
+    let out="Estas son las versiones de "+state.modelo+":\n\n";
+    d.versions.forEach(v=>{ out += "• "+v[0]+"\n  "+v[1]+"\n  "+v[2]+"\n\n"; });
+    addMsg(out.trim(),"assistant");
+    return;
+  }
+  addMsg(d[type],"assistant");
 }
 
 function hondaTopic(text,model){
