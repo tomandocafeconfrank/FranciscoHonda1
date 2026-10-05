@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Francisco Virtual Honda - Demo OS 2026</title>
+<title>Francisco Virtual Honda - OS 2026 V5</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:#0a0a0a;color:#fff;font-family:Inter,system-ui,sans-serif;height:100vh;display:flex;flex-direction:column;overflow:hidden}
@@ -24,7 +24,6 @@ header h1{font-size:16px;letter-spacing:1px} header h1 span{color:#e10600}
 .inputArea input{flex:1;background:#1a1a1a;border:1px solid #333;border-radius:10px;padding:12px 14px;color:#fff;outline:none;font-size:14px}
 .inputArea input:focus{border-color:#e10600}
 .inputArea button{background:#e10600;border:none;border-radius:10px;padding:0 20px;color:#fff;font-weight:700;cursor:pointer;transition:.2s}
-.inputArea button:hover{background:#b80500}
 .right{width:300px;min-width:300px;border-left:1px solid #222;background:#0f0f0f;padding:16px;overflow-y:auto}
 .card{background:#161616;border:1px solid #222;border-radius:12px;padding:12px;margin-bottom:12px}
 .card h4{font-size:11px;opacity:.6;margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px}
@@ -35,101 +34,292 @@ header h1{font-size:16px;letter-spacing:1px} header h1 span{color:#e10600}
 </head>
 <body>
 <header>
-<h1>Francisco García | <span>Honda Angelópolis</span> - OS 2026</h1>
-<div class="status">● Online - Método Francisco</div>
+<h1>Francisco García | <span>Honda Angelópolis</span> - OS 2026 V5</h1>
+<div class="status">● Online - Francisco Virtual</div>
 </header>
 <div class="main">
 <div class="left">
 <h3>Escenarios de prueba</h3>
-<button class="btn" onclick="sim('Hola vi la CR-V en Facebook, me mandas info?')">👋 Hola vi la CR-V</button>
-<button class="btn" onclick="sim('Es para mi familia, tenemos una bebé')">👶 Es para familia / bebé</button>
-<button class="btn" onclick="sim('MENSUALIDAD, ESPACIO Y SEGURIDAD')">✅ MENSUALIDAD, ESPACIO Y SEGURIDAD (BUG FIX)</button>
-<button class="btn" onclick="sim('Qué significa FCW y CMBS?')">❓ Qué significa FCW?</button>
-<button class="btn" onclick="sim('Cuánto rinde la CR-V HEV?')">⛽ Cuánto rinde?</button>
-<button class="btn" onclick="sim('Lo voy a pensar')">🤔 Lo voy a pensar</button>
-<button class="btn" onclick="sim('Busco algo económico, qué me recomiendas?')">💰 Busco económico</button>
+<button class="btn" onclick="sim('Hola')">👋 Hola</button>
+<button class="btn" onclick="sim('Quiero una CR-V')">🚙 Quiero una CR-V</button>
+<button class="btn" onclick="sim('Busco una camioneta para mi esposa y mis dos hijos, que no gaste tanta gasolina')">👨‍👩‍👧‍👦 Familia + rendimiento</button>
+<button class="btn" onclick="sim('me interesa saber costos')">💰 Me interesa saber costos</button>
+<button class="btn" onclick="sim('Solo estoy viendo, todavía no voy a comprar')">👀 Solo estoy viendo</button>
+<button class="btn" onclick="sim('Qué significa FCW?')">❓ FCW?</button>
 <h3>Estado</h3>
 <div class="card"><h4>Prioridades detectadas</h4><div id="prio"></div></div>
-<div class="card"><h4>Personas (solo si cliente dijo)</h4><div id="pers"></div></div>
-<div class="card"><h4>Debug JSON (anti-alucine)</h4><div id="json" class="json">{}</div></div>
+<div class="card"><h4>Personas</h4><div id="pers"></div></div>
+<div class="card"><h4>Debug JSON</h4><div id="json" class="json">{}</div></div>
 </div>
 <div class="chat">
 <div id="messages" class="messages"></div>
 <div class="inputArea">
-<input id="input" placeholder="Escribe como cliente... ej: MENSUALIDAD, ESPACIO Y SEGURIDAD" onkeydown="if(event.key==='Enter')send()"/>
+<input id="input" placeholder="Escribe... ej: Hola, quiero una CR-V" onkeydown="if(event.key==='Enter')send()"/>
 <button onclick="send()">Enviar</button>
 </div>
 </div>
 <div class="right">
 <div class="card"><h4>Perfil detectado</h4><div id="perfil">-</div></div>
-<div class="card"><h4>Técnica FRANCO</h4><div id="tecnica">F - Filtra / R - Reencuadra / A - Ancla / N - Navega / C - Cierra / O - Ofrece</div></div>
+<div class="card"><h4>Técnica FRANCO</h4><div id="tecnica">-</div></div>
 <div class="card"><h4>Próximo paso</h4><div id="next">Inicia conversación</div></div>
-<div class="card"><h4>Regla anti-alucine</h4><div style="font-size:12px;opacity:.7;line-height:1.4">Si cliente dice 3 cosas con comas, guardar las 3. NUNCA inventar bebé/hija si no lo dijo textual. Confirmar antes de avanzar.</div></div>
+<div class="card" style="border-color:#22c55e"><h4 style="color:#22c55e">FRANCISCO VIRTUAL V5</h4><div style="font-size:12px;line-height:1.4">✅ Amigable<br/>✅ Asistente personal de Francisco<br/>✅ No invasivo<br/>✅ No inventa precios + entiende typos</div></div>
 </div>
 </div>
 <script>
-let state={prioridades:[], personas:[], friccion:null};
+/*
+ FRANCISCO VIRTUAL V5
+ Separación conceptual:
+ 1) personalidad
+ 2) detección de necesidades
+ 3) perfil del prospecto
+ 4) respuesta conversacional
+
+ Este HTML es un prototipo local. Para producción, Honda OS, precios,
+ promociones, Notion, WhatsApp y la IA deben conectarse mediante
+ sus integraciones reales.
+*/
+
+const state={
+  prioridades:[],
+  perfil:{tipo:null,uso:null,personas:[],modelo:null,intencion:null},
+  ultimoTema:null
+};
+
 const msgs=document.getElementById('messages');
+
 function addMsg(text,who){
-  const d=document.createElement('div'); d.className='msg '+who; d.textContent=text; msgs.appendChild(d); msgs.scrollTop=msgs.scrollHeight;
+  const d=document.createElement('div');
+  d.className='msg '+who;
+  d.textContent=text;
+  msgs.appendChild(d);
+  msgs.scrollTop=msgs.scrollHeight;
 }
-function parsePrioridades(t){
-  const lower=t.toLowerCase();
-  const dict=["mensualidad","espacio","seguridad","rendimiento","equipamiento","tecnología","tecnologia","comodidad","precio","consumo"];
-  const found=[];
-  dict.forEach(k=>{ if(lower.includes(k)){ let n=k==="tecnologia"?"tecnología":k; if(!found.includes(n)) found.push(n);} });
-  return found.slice(0,3);
+
+function normaliza(t){
+  return t.toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g,"")
+    .replace(/[^a-z0-9ñ ]/g," ")
+    .replace(/\s+/g," ")
+    .trim();
 }
+
+function has(n,arr){return arr.some(x=>n.includes(x));}
+
+function detectPrioridades(t){
+  const n=normaliza(t), found=[];
+  if(has(n,["mensua","mnsua","mensial","pago mensual","mensual"])) found.push("mensualidad");
+  if(has(n,["espac","ezpac","espas","familia","cajuela","lugares"])) found.push("espacio");
+  if(has(n,["segur","sequr","safety"])) found.push("seguridad");
+  if(has(n,["rendim","rinde","consum","gasolina","gasta poco","ahorradora"])) found.push("rendimiento");
+  if(has(n,["equip","pantalla","tecnologia"])) found.push("equipamiento");
+  return found;
+}
+
+function detectPerfil(t){
+  const n=normaliza(t);
+
+  if(has(n,["familia","esposa","esposo","hijos","hijas","bebe","bebes","ninos"]))
+    state.perfil.tipo="familiar";
+
+  if(has(n,["diario","trabajo","ciudad","oficina","escuela"]))
+    state.perfil.uso="diario";
+
+  if(has(n,["carretera","viaje","viajes","viajar"]))
+    state.perfil.uso="carretera";
+
+  if(has(n,["crv","cr v"])) state.perfil.modelo="CR-V";
+  if(has(n,["city"])) state.perfil.modelo="CITY";
+  if(has(n,["brv","br v"])) state.perfil.modelo="BR-V";
+  if(has(n,["hrv","hr v"])) state.perfil.modelo="HR-V";
+  if(has(n,["civic"])) state.perfil.modelo="CIVIC";
+  if(has(n,["accord"])) state.perfil.modelo="ACCORD";
+
+  if(has(n,["comprar","quiero","busco","me interesa","cotizar","cotizacion"]))
+    state.perfil.intencion="compra";
+
+  if(has(n,["solo estoy viendo","solo veo","investigando","todavia no"]))
+    state.perfil.intencion="investigacion";
+}
+
 function detectPersonas(t){
-  const lower=t.toLowerCase(); const p=[];
-  if(lower.includes("bebé")||lower.includes("bebe")) p.push("bebé");
-  if(lower.includes("hija")) p.push("hija");
-  if(lower.includes("hijo")) p.push("hijo");
-  if(lower.includes("esposa")) p.push("esposa");
-  if(lower.includes("esposo")) p.push("esposo");
-  if(lower.includes("mamá")||lower.includes("mama")) p.push("mamá");
-  return p;
+  const n=normaliza(t), p=[];
+  if(has(n,["bebe","bebes"])) p.push("bebe");
+  if(has(n,["hijo","hijos"])) p.push("hijos");
+  if(has(n,["hija","hijas"])) p.push("hijas");
+  if(has(n,["esposa"])) p.push("esposa");
+  if(has(n,["esposo"])) p.push("esposo");
+  if(has(n,["familia"])) p.push("familia");
+  return [...new Set(p)];
 }
-function updateUI(){
-  document.getElementById('prio').innerHTML = state.prioridades.length? state.prioridades.map(x=>`<span class="badge active">${x.toUpperCase()}</span>`).join('') : '<span style="opacity:.4">-</span>';
-  document.getElementById('pers').innerHTML = state.personas.length? state.personas.map(x=>`<span class="badge">${x}</span>`).join('') : '<span style="opacity:.4">vacío (no inventar)</span>';
-  document.getElementById('json').textContent = JSON.stringify(state,null,2);
-}
-function botResponse(userText){
-  const newPrio=parsePrioridades(userText);
-  const newPers=detectPersonas(userText);
-  newPrio.forEach(p=>{ if(!state.prioridades.includes(p)) state.prioridades.push(p); });
-  newPers.forEach(p=>{ if(!state.personas.includes(p)) state.personas.push(p); });
-  let response="";
-  if(userText.toLowerCase().includes("hola") && userText.toLowerCase().includes("cr-v")){
-    response="Hola, soy Francisco de Honda Angelópolis 👋\n\nVi tu interés en CR-V por Facebook.\n\nPara no mandarte info que no te sirve: ¿la estás buscando más para uso familiar, diario o carretera?";
-    document.getElementById('perfil').textContent="Nuevo - Descubrimiento";
-    document.getElementById('next').textContent="PASO: Preguntar propósito";
-  } else if(state.prioridades.length>=2){
-    const lista=state.prioridades.map(p=>p.toUpperCase()).join(", ").replace(/, ([^,]*)$/, " y $1");
-    response=`Ok, me dijiste que no negociarías ${lista}, ¿correcto?\n\nSi tuvieras que ordenarlas, ¿cuál pesa más hoy?`;
-    document.getElementById('perfil').textContent="Analítico - 3 prioridades";
-    document.getElementById('tecnica').textContent="A - Ancla: confirmar las 3 antes de avanzar";
-    document.getElementById('next').textContent="Esperar orden de prioridades";
-  } else if(state.prioridades.length===1){
-    const p=state.prioridades[0];
-    const map={mensualidad:"MENSUALIDAD → te muestro 2 escenarios mismo plazo",espacio:"ESPACIO → probamos cajuela 635L + acceso",seguridad:"SEGURIDAD → Honda SENSING + 6 bolsas",rendimiento:"RENDIMIENTO → CR-V HEV 23.3 km/l combinado (varía por manejo)"};
-    response=`Perfecto, ${p.toUpperCase()} es clave.\n\nEn CR-V eso se traduce así:\n${map[p]||p}\n\n¿Hay otras 2 que no negociarías además de ${p.toUpperCase()}? Así te armo la comparativa completa.`;
-    document.getElementById('tecnica').textContent="F - Filtra: pedir 3 no negociables";
-  } else if(userText.toLowerCase().includes("familia") || userText.toLowerCase().includes("bebé") || userText.toLowerCase().includes("bebe")){
-    response="Gracias por decirme que es para familia.\n\nCuando dices familia, ¿qué es lo que más te estresa hoy del coche actual? ¿espacio para carriola/paquete, acceso para subir/bajar, o seguridad en carretera?";
-    document.getElementById('perfil').textContent="Familiar - Dolor real";
-    document.getElementById('tecnica').textContent="R - Reencuadra: pasar de feature a escena";
-  } else {
-    response="Gracias por compartirlo.\n\nSi tuvieras que decirme 3 cosas que NO negociarías en tu próxima camioneta entre espacio, rendimiento, seguridad, equipamiento y mensualidad, ¿cuáles serían?";
-    document.getElementById('perfil').textContent="Explorando";
-  }
+
+function updateState(t){
+  detectPerfil(t);
+  detectPrioridades(t).forEach(p=>{
+    if(!state.prioridades.includes(p)) state.prioridades.push(p);
+  });
+  detectPersonas(t).forEach(p=>{
+    if(!state.perfil.personas.includes(p)) state.perfil.personas.push(p);
+  });
   updateUI();
-  addMsg(response,'assistant');
 }
-function sim(t){ addMsg(t,'user'); setTimeout(()=>botResponse(t),400); }
-function send(){ const i=document.getElementById('input'); const t=i.value.trim(); if(!t) return; addMsg(t,'user'); i.value=''; setTimeout(()=>botResponse(t),400); }
-addMsg("Hola, soy Francisco de Honda Angelópolis 👋\n\nVi tu interés en CR-V por Facebook.\n\nPara no mandarte info que no te sirve: ¿la estás buscando más para uso familiar, diario o carretera?","assistant");
+
+function updateUI(){
+  document.getElementById('prio').innerHTML=state.prioridades.length
+    ? state.prioridades.map(x=>`<span class="badge active">${x.toUpperCase()}</span>`).join('')
+    : '<span style="opacity:.4">-</span>';
+
+  const p=state.perfil;
+  const tags=[
+    p.tipo&&`tipo: ${p.tipo}`,
+    p.uso&&`uso: ${p.uso}`,
+    p.modelo&&`modelo: ${p.modelo}`,
+    p.intencion&&`intencion: ${p.intencion}`,
+    ...p.personas
+  ].filter(Boolean);
+
+  document.getElementById('pers').innerHTML=tags.length
+    ? tags.map(x=>`<span class="badge">${x}</span>`).join('')
+    : '<span style="opacity:.4">vacio</span>';
+
+  document.getElementById('json').textContent=JSON.stringify(state,null,2);
+}
+
+function respuestaPrecios(){
+  document.getElementById('perfil').textContent="Intencion: costos";
+  document.getElementById('tecnica').textContent="Regla: no inventar precio";
+  document.getElementById('next').textContent="Solicitar modelo y confirmar datos vigentes";
+
+  return `Claro, te ayudo con los numeros. 👌🏻
+
+Para no darte un precio o promocion que ya haya cambiado, primero necesito saber que modelo y version estas considerando.
+
+Si todavia no sabes la version, no pasa nada. Dime que estas buscando y lo vamos aterrizando.
+
+Y ya con la opcion correcta, Francisco puede revisar contigo la cotizacion vigente.`;
+}
+
+function respuestaFCW(){
+  document.getElementById('tecnica').textContent="Explicacion tecnica sencilla";
+  document.getElementById('next').textContent="Detectar prioridad: seguridad";
+
+  return `Va, te lo explico sin aventarte el diccionario de Honda 😂
+
+FCW significa Forward Collision Warning. Es una alerta que puede advertirte cuando detecta riesgo de una colision frontal.
+
+CMBS es el sistema de mitigacion de colision con frenado. Puede intervenir con los frenos cuando se cumplen determinadas condiciones.
+
+El equipamiento exacto depende del modelo y la version, asi que prefiero revisarlo especificamente para el Honda que estes viendo.`;
+}
+
+function respuestaNatural(userText){
+  const n=normaliza(userText);
+  updateState(userText);
+
+  if(has(n,["hola","buenas","ola","que tal","buen dia","buenos dias"])){
+    document.getElementById('perfil').textContent="Saludo - nuevo prospecto";
+    document.getElementById('tecnica').textContent="Abrir conversacion";
+    document.getElementById('next').textContent="Descubrir necesidad";
+
+    return `¡Hola! 👋🏻 Soy el asistente virtual de Francisco, de Honda Angelopolis.
+
+Estoy aqui para ayudarte a conocer los Honda sin enredos y sin aventarte el catalogo completo de golpe 😂
+
+¿Que traes en mente?`;
+  }
+
+  if(has(n,["cost","precio","presio","promoc","promo","descuento","oferta","cuanto cuesta","cuanto vale"]))
+    return respuestaPrecios();
+
+  if(has(n,["fcw","cmbs","sensing"]))
+    return respuestaFCW();
+
+  if(state.perfil.intencion==="investigacion"){
+    document.getElementById('perfil').textContent="Cliente investigando";
+    document.getElementById('tecnica').textContent="No presionar";
+    document.getElementById('next').textContent="Resolver dudas";
+
+    return `Sin problema. 😄 No necesitas estar listo para comprar para preguntar.
+
+Tu dime que quieres conocer y lo revisamos con calma. Si despues resulta que un Honda te hace sentido, ya vemos el siguiente paso.`;
+  }
+
+  if(state.perfil.modelo){
+    document.getElementById('perfil').textContent=`Interes: ${state.perfil.modelo}`;
+    document.getElementById('tecnica').textContent="Detectar necesidad antes de recomendar version";
+    document.getElementById('next').textContent="Identificar uso y prioridades";
+
+    const prioridad=state.prioridades.length
+      ? ` Ya vi que para ti pesa ${state.prioridades.join(", ")}.`
+      : "";
+
+    return `Va, ${state.perfil.modelo}. 👌🏻${prioridad}
+
+Antes de aventarte todas las versiones, dime algo: ¿lo buscas principalmente para uso diario, familia o carretera?
+
+Asi te digo que version tiene mas sentido para lo que realmente necesitas.`;
+  }
+
+  if(state.prioridades.length>=2){
+    document.getElementById('perfil').textContent="Necesidades detectadas";
+    document.getElementById('tecnica').textContent="FRANCO: priorizar necesidades";
+    document.getElementById('next').textContent="Elegir prioridad principal";
+
+    return `Va, ya voy entendiendo por donde va la cosa. 👌🏻
+
+Hasta ahora lo que mas te importa es: ${state.prioridades.map(p=>p.toUpperCase()).join(", ")}.
+
+De esas, ¿cual seria la numero uno para ti? Con eso podemos empezar a descartar opciones que no te convengan.`;
+  }
+
+  if(state.perfil.tipo==="familiar"){
+    document.getElementById('perfil').textContent="Cliente familiar";
+    document.getElementById('tecnica').textContent="FRANCO: descubrir uso";
+    document.getElementById('next').textContent="Preguntar uso: ciudad/carretera";
+
+    return `Va, ya entendi que el enfoque es familiar. 👌🏻
+
+Para no recomendarte una camioneta nada mas porque si, dime: ¿la usarian principalmente en ciudad o tambien hacen bastante carretera?
+
+Con eso ya te puedo orientar mucho mejor.`;
+  }
+
+  document.getElementById('perfil').textContent="Necesidad por descubrir";
+  document.getElementById('tecnica').textContent="FRANCO: una pregunta a la vez";
+  document.getElementById('next').textContent="Descubrir tipo de vehiculo";
+
+  return `Va, cuentame un poquito. 👌🏻
+
+¿Que estas buscando: algo para uso diario, una opcion familiar, algo para carretera o todavia estas viendo que te conviene?
+
+No pasa nada si todavia no tienes modelo. Para eso estamos.`;
+}
+
+function botResponse(userText){
+  addMsg(respuestaNatural(userText),'assistant');
+}
+
+function sim(t){
+  addMsg(t,'user');
+  setTimeout(()=>botResponse(t),250);
+}
+
+function send(){
+  const i=document.getElementById('input');
+  const t=i.value.trim();
+  if(!t)return;
+  addMsg(t,'user');
+  i.value='';
+  setTimeout(()=>botResponse(t),250);
+}
+
+const mensajeBienvenida=`Hola, soy el asistente virtual de Francisco, de Honda Angelopolis 👋🏻
+
+Estoy aqui para ayudarte a conocer los Honda sin enredos y sin aventarte el catalogo completo de golpe 😂
+
+¿Que traes en mente?`;
+
+addMsg(mensajeBienvenida,"assistant");
 updateUI();
 </script>
 </body>
