@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Francisco Virtual Honda - Demo OS 2026</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0a0a;color:#fff;font-family:Inter,system-ui,sans-serif;height:100vh;display:flex;flex-direction:column;overflow:hidden}
+header{padding:16px 24px;border-bottom:1px solid #222;display:flex;justify-content:space-between;align-items:center;background:#111;flex-shrink:0}
+header h1{font-size:16px;letter-spacing:1px} header h1 span{color:#e10600}
+.status{font-size:12px;color:#22c55e;background:#22c55e22;border:1px solid #22c55e44;padding:4px 10px;border-radius:20px}
+.main{flex:1;display:flex;overflow:hidden}
+.left{width:280px;min-width:280px;border-right:1px solid #222;background:#0f0f0f;padding:12px;overflow-y:auto}
+.left h3{font-size:11px;opacity:.5;margin:16px 0 8px;letter-spacing:1px;text-transform:uppercase}
+.btn{display:block;width:100%;text-align:left;padding:11px 12px;margin:5px 0;background:#1a1a1a;border:1px solid #222;border-radius:10px;color:#fff;cursor:pointer;font-size:13px;transition:.2s}
+.btn:hover{background:#222;border-color:#e10600;transform:translateX(2px)}
+.chat{flex:1;display:flex;flex-direction:column;background:radial-gradient(600px at 20% 10%, #1a0000 0%, #0a0a0a 60%);min-width:0}
+.messages{flex:1;overflow-y:auto;padding:24px;display:flex;flex-direction:column;gap:14px}
+.msg{max-width:75%;padding:12px 16px;border-radius:16px;font-size:14px;line-height:1.5;word-wrap:break-word}
+.user{align-self:flex-end;background:#e10600;color:#fff;border-bottom-right-radius:4px;box-shadow:0 2px 8px #e1060044}
+.assistant{align-self:flex-start;background:#1e1e1e;border:1px solid #2a2a2a;border-bottom-left-radius:4px;white-space:pre-wrap}
+.inputArea{padding:12px;border-top:1px solid #222;display:flex;gap:8px;background:#111;flex-shrink:0}
+.inputArea input{flex:1;background:#1a1a1a;border:1px solid #333;border-radius:10px;padding:12px 14px;color:#fff;outline:none;font-size:14px}
+.inputArea input:focus{border-color:#e10600}
+.inputArea button{background:#e10600;border:none;border-radius:10px;padding:0 20px;color:#fff;font-weight:700;cursor:pointer;transition:.2s}
+.inputArea button:hover{background:#b80500}
+.right{width:300px;min-width:300px;border-left:1px solid #222;background:#0f0f0f;padding:16px;overflow-y:auto}
+.card{background:#161616;border:1px solid #222;border-radius:12px;padding:12px;margin-bottom:12px}
+.card h4{font-size:11px;opacity:.6;margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px}
+.json{font-family:monospace;font-size:11px;background:#000;padding:10px;border-radius:8px;color:#22c55e;overflow:auto;border:1px solid #1a1a1a}
+.badge{display:inline-block;background:#222;border:1px solid #333;padding:3px 9px;border-radius:20px;font-size:11px;margin:3px 2px}
+.badge.active{background:#e1060022;border-color:#e10600;color:#ffb3b0}
+</style>
+</head>
+<body>
+<header>
+<h1>Francisco García | <span>Honda Angelópolis</span> - OS 2026</h1>
+<div class="status">● Online - Método Francisco</div>
+</header>
+<div class="main">
+<div class="left">
+<h3>Escenarios de prueba</h3>
+<button class="btn" onclick="sim('Hola vi la CR-V en Facebook, me mandas info?')">👋 Hola vi la CR-V</button>
+<button class="btn" onclick="sim('Es para mi familia, tenemos una bebé')">👶 Es para familia / bebé</button>
+<button class="btn" onclick="sim('MENSUALIDAD, ESPACIO Y SEGURIDAD')">✅ MENSUALIDAD, ESPACIO Y SEGURIDAD (BUG FIX)</button>
+<button class="btn" onclick="sim('Qué significa FCW y CMBS?')">❓ Qué significa FCW?</button>
+<button class="btn" onclick="sim('Cuánto rinde la CR-V HEV?')">⛽ Cuánto rinde?</button>
+<button class="btn" onclick="sim('Lo voy a pensar')">🤔 Lo voy a pensar</button>
+<button class="btn" onclick="sim('Busco algo económico, qué me recomiendas?')">💰 Busco económico</button>
+<h3>Estado</h3>
+<div class="card"><h4>Prioridades detectadas</h4><div id="prio"></div></div>
+<div class="card"><h4>Personas (solo si cliente dijo)</h4><div id="pers"></div></div>
+<div class="card"><h4>Debug JSON (anti-alucine)</h4><div id="json" class="json">{}</div></div>
+</div>
+<div class="chat">
+<div id="messages" class="messages"></div>
+<div class="inputArea">
+<input id="input" placeholder="Escribe como cliente... ej: MENSUALIDAD, ESPACIO Y SEGURIDAD" onkeydown="if(event.key==='Enter')send()"/>
+<button onclick="send()">Enviar</button>
+</div>
+</div>
+<div class="right">
+<div class="card"><h4>Perfil detectado</h4><div id="perfil">-</div></div>
+<div class="card"><h4>Técnica FRANCO</h4><div id="tecnica">F - Filtra / R - Reencuadra / A - Ancla / N - Navega / C - Cierra / O - Ofrece</div></div>
+<div class="card"><h4>Próximo paso</h4><div id="next">Inicia conversación</div></div>
+<div class="card"><h4>Regla anti-alucine</h4><div style="font-size:12px;opacity:.7;line-height:1.4">Si cliente dice 3 cosas con comas, guardar las 3. NUNCA inventar bebé/hija si no lo dijo textual. Confirmar antes de avanzar.</div></div>
+</div>
+</div>
+<script>
+let state={prioridades:[], personas:[], friccion:null};
+const msgs=document.getElementById('messages');
+function addMsg(text,who){
+  const d=document.createElement('div'); d.className='msg '+who; d.textContent=text; msgs.appendChild(d); msgs.scrollTop=msgs.scrollHeight;
+}
+function parsePrioridades(t){
+  const lower=t.toLowerCase();
+  const dict=["mensualidad","espacio","seguridad","rendimiento","equipamiento","tecnología","tecnologia","comodidad","precio","consumo"];
+  const found=[];
+  dict.forEach(k=>{ if(lower.includes(k)){ let n=k==="tecnologia"?"tecnología":k; if(!found.includes(n)) found.push(n);} });
+  return found.slice(0,3);
+}
+function detectPersonas(t){
+  const lower=t.toLowerCase(); const p=[];
+  if(lower.includes("bebé")||lower.includes("bebe")) p.push("bebé");
+  if(lower.includes("hija")) p.push("hija");
+  if(lower.includes("hijo")) p.push("hijo");
+  if(lower.includes("esposa")) p.push("esposa");
+  if(lower.includes("esposo")) p.push("esposo");
+  if(lower.includes("mamá")||lower.includes("mama")) p.push("mamá");
+  return p;
+}
+function updateUI(){
+  document.getElementById('prio').innerHTML = state.prioridades.length? state.prioridades.map(x=>`<span class="badge active">${x.toUpperCase()}</span>`).join('') : '<span style="opacity:.4">-</span>';
+  document.getElementById('pers').innerHTML = state.personas.length? state.personas.map(x=>`<span class="badge">${x}</span>`).join('') : '<span style="opacity:.4">vacío (no inventar)</span>';
+  document.getElementById('json').textContent = JSON.stringify(state,null,2);
+}
+function botResponse(userText){
+  const newPrio=parsePrioridades(userText);
+  const newPers=detectPersonas(userText);
+  newPrio.forEach(p=>{ if(!state.prioridades.includes(p)) state.prioridades.push(p); });
+  newPers.forEach(p=>{ if(!state.personas.includes(p)) state.personas.push(p); });
+  let response="";
+  if(userText.toLowerCase().includes("hola") && userText.toLowerCase().includes("cr-v")){
+    response="Hola, soy Francisco de Honda Angelópolis 👋\n\nVi tu interés en CR-V por Facebook.\n\nPara no mandarte info que no te sirve: ¿la estás buscando más para uso familiar, diario o carretera?";
+    document.getElementById('perfil').textContent="Nuevo - Descubrimiento";
+    document.getElementById('next').textContent="PASO: Preguntar propósito";
+  } else if(state.prioridades.length>=2){
+    const lista=state.prioridades.map(p=>p.toUpperCase()).join(", ").replace(/, ([^,]*)$/, " y $1");
+    response=`Ok, me dijiste que no negociarías ${lista}, ¿correcto?\n\nSi tuvieras que ordenarlas, ¿cuál pesa más hoy?`;
+    document.getElementById('perfil').textContent="Analítico - 3 prioridades";
+    document.getElementById('tecnica').textContent="A - Ancla: confirmar las 3 antes de avanzar";
+    document.getElementById('next').textContent="Esperar orden de prioridades";
+  } else if(state.prioridades.length===1){
+    const p=state.prioridades[0];
+    const map={mensualidad:"MENSUALIDAD → te muestro 2 escenarios mismo plazo",espacio:"ESPACIO → probamos cajuela 635L + acceso",seguridad:"SEGURIDAD → Honda SENSING + 6 bolsas",rendimiento:"RENDIMIENTO → CR-V HEV 23.3 km/l combinado (varía por manejo)"};
+    response=`Perfecto, ${p.toUpperCase()} es clave.\n\nEn CR-V eso se traduce así:\n${map[p]||p}\n\n¿Hay otras 2 que no negociarías además de ${p.toUpperCase()}? Así te armo la comparativa completa.`;
+    document.getElementById('tecnica').textContent="F - Filtra: pedir 3 no negociables";
+  } else if(userText.toLowerCase().includes("familia") || userText.toLowerCase().includes("bebé") || userText.toLowerCase().includes("bebe")){
+    response="Gracias por decirme que es para familia.\n\nCuando dices familia, ¿qué es lo que más te estresa hoy del coche actual? ¿espacio para carriola/paquete, acceso para subir/bajar, o seguridad en carretera?";
+    document.getElementById('perfil').textContent="Familiar - Dolor real";
+    document.getElementById('tecnica').textContent="R - Reencuadra: pasar de feature a escena";
+  } else {
+    response="Gracias por compartirlo.\n\nSi tuvieras que decirme 3 cosas que NO negociarías en tu próxima camioneta entre espacio, rendimiento, seguridad, equipamiento y mensualidad, ¿cuáles serían?";
+    document.getElementById('perfil').textContent="Explorando";
+  }
+  updateUI();
+  addMsg(response,'assistant');
+}
+function sim(t){ addMsg(t,'user'); setTimeout(()=>botResponse(t),400); }
+function send(){ const i=document.getElementById('input'); const t=i.value.trim(); if(!t) return; addMsg(t,'user'); i.value=''; setTimeout(()=>botResponse(t),400); }
+addMsg("Hola, soy Francisco de Honda Angelópolis 👋\n\nVi tu interés en CR-V por Facebook.\n\nPara no mandarte info que no te sirve: ¿la estás buscando más para uso familiar, diario o carretera?","assistant");
+updateUI();
+</script>
+</body>
+</html>
