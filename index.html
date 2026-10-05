@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Francisco Asistente Virtual Honda - OS 2026 V4 + Cerebro Honda</title>
+<title>Francisco Virtual Honda - OS 2026 V4 + Cerebro Honda</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:#0a0a0a;color:#fff;font-family:Inter,system-ui,sans-serif;height:100vh;display:flex;flex-direction:column;overflow:hidden}
@@ -15,6 +15,14 @@ header h1{font-size:16px;letter-spacing:1px} header h1 span{color:#e10600}
 .left h3{font-size:11px;opacity:.5;margin:16px 0 8px;letter-spacing:1px;text-transform:uppercase}
 .btn{display:block;width:100%;text-align:left;padding:11px 12px;margin:5px 0;background:#1a1a1a;border:1px solid #222;border-radius:10px;color:#fff;cursor:pointer;font-size:13px;transition:.2s}
 .btn:hover{background:#222;border-color:#e10600;transform:translateX(2px)}
+.welcome-btn{border-color:#2b2b2b;background:#151515}
+.welcome-btn:first-of-type{border-color:#e10600;background:#1b0b0b}
+.chatActions{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.chatAction{background:#171717;border:1px solid #333;color:#fff;border-radius:12px;padding:11px 13px;cursor:pointer;font-size:13px;transition:.18s}
+.chatAction:hover{background:#222;border-color:#e10600;transform:translateY(-1px)}
+.modelGrid{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.modelChip{background:#171717;border:1px solid #333;color:#fff;border-radius:999px;padding:9px 13px;cursor:pointer;font-size:13px}
+.modelChip:hover{border-color:#e10600;background:#211010}
 .chat{flex:1;display:flex;flex-direction:column;background:radial-gradient(600px at 20% 10%, #1a0000 0%, #0a0a0a 60%);min-width:0}
 .messages{flex:1;overflow-y:auto;padding:24px;display:flex;flex-direction:column;gap:14px}
 .msg{max-width:75%;padding:12px 16px;border-radius:16px;font-size:14px;line-height:1.5;word-wrap:break-word}
@@ -39,14 +47,15 @@ header h1{font-size:16px;letter-spacing:1px} header h1 span{color:#e10600}
 </header>
 <div class="main">
 <div class="left">
-<h3>Escenarios de prueba</h3>
-<button class="btn" onclick="sim('Hola')">👋 Hola</button>
-<button class="btn" onclick="sim('Quiero una CR-V')">🚙 Quiero una CR-V</button>
-<button class="btn" onclick="sim('MENSUALIDAD, ESPACIO Y SEGURIDAD')">✅ MENSUALIDAD, ESPACIO Y SEGURIDAD</button>
-<button class="btn" onclick="sim('me interesa saber costos')">💰 me interesa saber costos</button>
-<button class="btn" onclick="sim('Qué significa FCW?')">❓ FCW?</button>
+<h3>Inicio</h3>
+<button class="btn welcome-btn" onclick="welcomeAction('encontrar')">🚗 Quiero encontrar mi Honda</button>
+<button class="btn welcome-btn" onclick="welcomeAction('modelo')">🔎 Ya tengo un modelo en mente</button>
+<button class="btn welcome-btn" onclick="welcomeAction('comparar')">⚖️ Quiero comparar</button>
+<button class="btn welcome-btn" onclick="welcomeAction('duda')">🧠 Tengo una duda sobre un Honda</button>
+<button class="btn welcome-btn" onclick="welcomeAction('pago')">💰 Quiero revisar opciones de pago</button>
+<button class="btn welcome-btn" onclick="welcomeAction('viendo')">👀 Solo estoy viendo</button>
 
-<h3>Cerebro Honda</h3>
+<h3>Explorar Honda</h3>
 <button class="btn" onclick="selectHondaModel('CITY')">🚗 City</button>
 <button class="btn" onclick="selectHondaModel('CIVIC')">🚘 Civic</button>
 <button class="btn" onclick="selectHondaModel('HR-V')">🚙 HR-V</button>
@@ -198,6 +207,80 @@ function detectHondaModel(text){
   if(n.includes("city")) return "CITY";
   if(n.includes("accord")) return "ACCORD";
   return null;
+}
+
+function addChatActions(items){
+  const wrap=document.createElement("div");
+  wrap.className="chatActions";
+  items.forEach(([label,fn])=>{
+    const b=document.createElement("button");
+    b.className="chatAction";
+    b.textContent=label;
+    b.onclick=fn;
+    wrap.appendChild(b);
+  });
+  msgs.appendChild(wrap);
+  msgs.scrollTop=msgs.scrollHeight;
+}
+
+function showModelChoices(){
+  addMsg("Perfecto. ¿Cuál tienes en mente?", "assistant");
+  const wrap=document.createElement("div");
+  wrap.className="modelGrid";
+  Object.keys(DATA).forEach(model=>{
+    const b=document.createElement("button");
+    b.className="modelChip";
+    b.textContent=model;
+    b.onclick=()=>selectHondaModel(model);
+    wrap.appendChild(b);
+  });
+  msgs.appendChild(wrap);
+  msgs.scrollTop=msgs.scrollHeight;
+}
+
+function welcomeAction(type){
+  if(type==="modelo"){ showModelChoices(); return; }
+  if(type==="encontrar"){
+    addMsg("Quiero encontrar mi Honda", "user");
+    addMsg("Va. No necesitas saber el modelo todavía. Te voy a hacer unas preguntas rápidas para encontrar por dónde empezar.", "assistant");
+    addChatActions([
+      ["🚙 Quiero una camioneta",()=>sim("Quiero una camioneta")],
+      ["🚗 Quiero un auto",()=>sim("Quiero un auto")],
+      ["🔄 Quiero cambiar mi auto",()=>sim("Quiero cambiar mi auto")],
+      ["💰 Lo principal es el presupuesto",()=>sim("Lo principal es el presupuesto")]
+    ]);
+    return;
+  }
+  if(type==="comparar"){
+    addMsg("Quiero comparar", "user");
+    addMsg("Claro. Dime qué modelos quieres poner frente a frente y te explico las diferencias con los datos que tengo validados.", "assistant");
+    addChatActions([
+      ["HR-V vs CR-V",()=>sim("HR-V vs CR-V")],
+      ["City vs Civic",()=>sim("City vs Civic")],
+      ["BR-V vs CR-V",()=>sim("BR-V vs CR-V")],
+      ["Elegir modelos",()=>showModelChoices()]
+    ]);
+    return;
+  }
+  if(type==="duda"){
+    addMsg("Tengo una duda sobre un Honda", "user");
+    addMsg("Échamela. Si es algo técnico, de equipamiento o de versiones, primero identificamos el modelo y te respondo con lo que esté validado.", "assistant");
+    showModelChoices();
+    return;
+  }
+  if(type==="pago"){
+    sim("Quiero revisar opciones de pago");
+    return;
+  }
+  if(type==="viendo"){
+    addMsg("Solo estoy viendo", "user");
+    addMsg("Sin problema 😎. Puedes curiosear tranquilo. Si quieres, puedo enseñarte modelos, comparar versiones o explicarte alguna tecnología sin presión.", "assistant");
+    addChatActions([
+      ["🚗 Ver modelos",()=>showModelChoices()],
+      ["⚖️ Comparar",()=>welcomeAction("comparar")],
+      ["🧠 Tengo una duda",()=>welcomeAction("duda")]
+    ]);
+  }
 }
 
 function selectHondaModel(model){
@@ -352,15 +435,35 @@ Si tuvieras que decirme 3 cosas que NO negociarías en tu próxima camioneta ent
 function sim(t){ addMsg(t,'user'); setTimeout(()=>botResponse(t),300); }
 function send(){ const i=document.getElementById('input'); const t=i.value.trim(); if(!t) return; addMsg(t,'user'); i.value=''; setTimeout(()=>botResponse(t),300); }
 
-// --- NUEVO MENSAJE DE ENTRADA AMIGABLE V4 ---
-const mensajeBienvenida = `Hola, soy el asistente personal de Francisco de Honda Angelópolis 👋
+// --- BIENVENIDA PRINCIPAL ---
+function iniciarBienvenida(){
+  msgs.innerHTML="";
+  state.modelo=null;
+  document.getElementById("perfil").textContent="-";
+  document.getElementById("tecnica").textContent="-";
+  document.getElementById("next").textContent="Elige una opción para comenzar";
+  const mensajeBienvenida = `👋 ¡Qué gusto tenerte por aquí!
 
-Quiero ayudarte a elegir tu nuevo Honda sin enredos.
+Soy el asistente virtual de Francisco de Honda Angelópolis.
 
-¿Dime qué traes en mente?`;
+Puedo ayudarte a conocer los Honda, comparar versiones y encontrar una opción que tenga sentido para ti.
 
-addMsg(mensajeBienvenida,"assistant");
-updateUI();
+No necesitas saber exactamente qué Honda quieres. Cuéntame qué buscas y te ayudo a encontrar por dónde empezar.
+
+¿Qué te gustaría hacer?`;
+  addMsg(mensajeBienvenida,"assistant");
+  addChatActions([
+    ["🚗 Quiero encontrar mi Honda",()=>welcomeAction("encontrar")],
+    ["🔎 Ya tengo un modelo en mente",()=>welcomeAction("modelo")],
+    ["⚖️ Quiero comparar",()=>welcomeAction("comparar")],
+    ["🧠 Tengo una duda sobre un Honda",()=>welcomeAction("duda")],
+    ["💰 Quiero revisar opciones de pago",()=>welcomeAction("pago")],
+    ["👀 Solo estoy viendo",()=>welcomeAction("viendo")]
+  ]);
+  updateUI();
+}
+
+iniciarBienvenida();
 </script>
 </body>
 </html>
