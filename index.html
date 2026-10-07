@@ -302,7 +302,22 @@ function welcomeAction(type){
   }
 }
 
-function selectHondaModel(model){
+async function selectHondaModel(model){
+  try {
+    const os = await hondaOSGet("VERSIONES");
+
+    console.log("HONDA OS CONECTADO:", os);
+
+    document.getElementById('tecnica').textContent =
+      `Honda OS conectado · ${os.rows.length} registros`;
+  } catch (error) {
+    console.error("HONDA OS ERROR:", error);
+
+    document.getElementById('tecnica').textContent =
+      "Honda OS no disponible";
+  }
+
+  state.modelo=model;
   state.modelo=model;
   document.getElementById('perfil').textContent="Modelo: "+model;
   document.getElementById('tecnica').textContent="Cerebro Honda activo";
