@@ -113,12 +113,31 @@ function updateUI(){
   document.getElementById('pers').innerHTML = state.personas.length? state.personas.map(x=>`<span class="badge">${x}</span>`).join('') : '<span style="opacity:.4">vacío</span>';
   document.getElementById('json').textContent = JSON.stringify(state,null,2);
 }
-
 // ============================================================
 // CEREBRO HONDA - PARTE 2 INTEGRADA
-// Basado en el archivo maestro Honda OS validado que cargamos.
-// Si un dato no está en el cerebro, NO se inventa.
+// Conexión con Honda OS
 // ============================================================
+
+const HONDA_OS_API = "/api/honda-os";
+
+async function hondaOSGet(sheet) {
+  const response = await fetch(
+    `${HONDA_OS_API}?sheet=${encodeURIComponent(sheet)}`
+  );
+
+  if (!response.ok) {
+    throw new Error(`Honda OS HTTP ${response.status}`);
+  }
+
+  const data = await response.json();
+
+  if (!data.ok) {
+    throw new Error(data.error || "Error consultando Honda OS");
+  }
+
+  return data;
+}
+
 const DATA = {
 "CR-V":{
   intro:"5 pasajeros. La CR-V 2026 tiene versiones Turbo y Hybrid.",
