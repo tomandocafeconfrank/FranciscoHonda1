@@ -303,28 +303,38 @@ function welcomeAction(type){
 }
 
 async function selectHondaModel(model){
+  state.modelo=model;
+
+  let os=null;
+
   try {
-    const os = await hondaOSGet("VERSIONES");
+    os=await hondaOSGet("VERSIONES");
 
     console.log("HONDA OS CONECTADO:", os);
 
     document.getElementById('tecnica').textContent =
       `Honda OS conectado · ${os.rows.length} registros`;
-  } catch (error) {
+  } catch(error) {
     console.error("HONDA OS ERROR:", error);
 
     document.getElementById('tecnica').textContent =
       "Honda OS no disponible";
   }
 
-  state.modelo=model;
-  state.modelo=model;
   document.getElementById('perfil').textContent="Modelo: "+model;
-  document.getElementById('tecnica').textContent="Cerebro Honda activo";
-  document.getElementById('next').textContent="Puedes preguntar por versiones, seguridad, rendimiento o motor";
+
+  document.getElementById('next').textContent =
+    "Puedes preguntar por versiones, seguridad, rendimiento o motor";
+
   updateUI();
-  addMsg("Perfecto. Vamos con "+model+".\n\n"+DATA[model].intro,"assistant");
+
+  addMsg(
+    "Perfecto. Vamos con "+model+".\n\n"+DATA[model].intro,
+    "assistant"
+  );
+
   addMsg("¿Qué quieres revisar?","assistant");
+
   addChatActions([
     ["🔎 Versiones",()=>topicButton("versiones")],
     ["🛡️ Seguridad",()=>topicButton("seguridad")],
