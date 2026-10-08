@@ -345,54 +345,25 @@ async function selectHondaModel(model){
     ["🏠 Volver al inicio",()=>iniciarBienvenida()]
   ]);
 }
-  
-if(type==="versiones"){
-  addMsg("🔎 Versiones","user");
 
-  try {
-    const os = await hondaOSGet("VERSIONES");
-
-    const filas = os.rows.filter(row =>
-      normaliza(row[0]) === normaliza(state.modelo)
-    );
-
-    if(filas.length){
-      let out="Estas son las versiones de "+state.modelo+" según Honda OS:\n\n";
-
-      filas
-        .sort((a,b)=>(Number(a[2])||0)-(Number(b[2])||0))
-        .forEach(row=>{
-          out += "• "+row[3]+"\n";
-
-          if(row[1]){
-            out += "Año: "+row[1]+"\n";
-          }
-
-          out += "\n";
-        });
-
-      addMsg(out,"assistant");
-      return;
-    }
-
-    throw new Error("No hay versiones registradas para este modelo");
-
-  } catch(error) {
-
-    console.error("HONDA OS VERSIONES ERROR:",error);
-
+function topicButton(type){
+  if(!state.modelo){ return; }
+  const d=DATA[state.modelo];
+  const labels={
+    versiones:"🔎 Versiones",
+    seguridad:"🛡️ Seguridad",
+    rendimiento:"⛽ Rendimiento",
+    motor:"⚙️ Motor / transmisión",
+    comparar:"⚖️ Diferencias entre versiones",
+    competencia:"🥊 Competencia"
+  };
+  addMsg(labels[type],"user");
+  if(type==="versiones"){
     let out="Estas son las versiones de "+state.modelo+":\n\n";
-
-    d.versions.forEach(v=>{
-      out+="• "+v[0]+"\n";
-      out+=v[1]+"\n";
-      out+=v[2]+"\n\n";
-    });
-
-    addMsg(out,"assistant");
+    d.versions.forEach(v=>{ out += "• "+v[0]+"\n  "+v[1]+"\n  "+v[2]+"\n\n"; });
+    addMsg(out.trim(),"assistant");
     return;
   }
-}
   addMsg(d[type],"assistant");
 }
 
