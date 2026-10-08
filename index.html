@@ -370,7 +370,7 @@ async function selectHondaModel(model){
   ]);
 }
 
-function topicButton(type){
+async function topicButton(type){
   if(!state.modelo){ return; }
   const d=DATA[state.modelo];
   const labels={
@@ -383,11 +383,56 @@ function topicButton(type){
   };
   addMsg(labels[type],"user");
   if(type==="versiones"){
-    let out="Estas son las versiones de "+state.modelo+":\n\n";
-    d.versions.forEach(v=>{ out += "• "+v[0]+"\n  "+v[1]+"\n  "+v[2]+"\n\n"; });
+  try{
+
+    const os = await getHondaVersions(state.modelo);
+
+    const headers = os.headers || [];
+    const rows = os.rows || [];
+
+    const versionIndex = headers.findIndex(h =>
+      normaliza(h).includes("version")
+    );
+
+    const anioIndex = headers.findIndex(h =>
+      normaliza(h).includes("ano")
+    );
+
+    if(versionIndex === -1){
+      throw new Error("Honda OS: no se encontró la columna Versión");
+    }
+
+    let out = "Estas son las versiones de "+state.modelo+":\n\n";
+
+    rows.forEach(row => {
+
+      const version = row[versionIndex] || "Versión no especificada";
+      const anio = anioIndex !== -1 ? (row[anioIndex] || "") : "";
+
+      out += "• "+version;
+
+      if(anio){
+        out += " · "+anio;
+      }
+
+      out += "\n\n";
+    });
+
     addMsg(out.trim(),"assistant");
     return;
+
+  }catch(error){
+
+    console.error("HONDA OS VERSIONES ERROR:",error);
+
+    addMsg(
+      "No pude consultar las versiones directamente desde Honda OS en este momento. Intenta nuevamente en unos segundos.",
+      "assistant"
+    );
+
+    return;
   }
+}
   addMsg(d[type],"assistant");
 }
 
