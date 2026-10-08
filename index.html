@@ -138,9 +138,33 @@ async function hondaOSGet(sheet) {
   return data;
 }
 
-async function getHondaVersions(model){
+  async function getHondaVersions(model){
 
   const os = await hondaOSGet("VERSIONES");
+
+  const headers = os.headers || [];
+  const rows = os.rows || [];
+
+  const modeloIndex = headers.findIndex(h =>
+    normaliza(h).includes("modelo")
+  );
+
+  if(modeloIndex === -1){
+    throw new Error("Honda OS: no se encontró la columna Modelo");
+  }
+
+  const coincidencias = rows.filter(row =>
+    normaliza(row[modeloIndex] || "") === normaliza(model)
+  );
+
+  return {
+    headers,
+    rows: coincidencias
+  };
+}
+async function getHondaSpecifications(model){
+
+  const os = await hondaOSGet("ESPECIFICACIONES");
 
   const headers = os.headers || [];
   const rows = os.rows || [];
