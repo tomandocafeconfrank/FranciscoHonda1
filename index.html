@@ -505,19 +505,32 @@ async function topicButton(type){
     return;
   }
 }
+  if(type==="motor"){
+  try{
+    const os = await getHondaSpecifications(state.modelo);
+    const respuesta = formatHondaSpecifications(os);
+
+    if(!respuesta){
+      throw new Error("Honda OS no devolvió especificaciones");
+    }
+
+    addMsg(respuesta,"assistant");
+    return;
+
+  }catch(error){
+    console.error("HONDA OS MOTOR ERROR:",error);
+
+    addMsg(
+      "No pude consultar las especificaciones técnicas en este momento. Intenta nuevamente en unos segundos.",
+      "assistant"
+    );
+
+    return;
+  }
+}
   addMsg(d[type],"assistant");
 }
-
-function hondaTopic(text,model){
-  const d=DATA[model];
-  const n=normaliza(text);
-  if(n.includes("versi") || n.includes("equip") || n.includes("que trae") || n.includes("diferencia")){
-    let out="Estas son las versiones de "+model+":\n\n";
-    d.versions.forEach(v=>{
-      out += "• "+v[0]+"\n  "+v[1]+"\n  "+v[2]+"\n\n";
-    });
-    return out.trim();
-  }
+  
   // Honda SENSING: primero respondemos qué es, antes de mandar al bloque de seguridad.
   if(n.includes("que es el sensing") || n.includes("que es honda sensing") || n.includes("que es sensing") || n.includes("que significa sensing") || n.includes("para que sirve sensing")){
     if(model === "BR-V"){
