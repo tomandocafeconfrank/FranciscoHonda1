@@ -186,7 +186,55 @@ async function getHondaSpecifications(model){
     rows: coincidencias
   };
 }
-const DATA = {
+
+function formatHondaSpecifications(os){
+
+  const headers = os.headers || [];
+  const rows = os.rows || [];
+
+  const index = name =>
+    headers.findIndex(h =>
+      normaliza(h).includes(normaliza(name))
+    );
+
+  const versionIndex = index("version");
+  const categoriaIndex = index("categoria");
+  const datoIndex = index("dato");
+  const potenciaIndex = index("potencia");
+  const torqueIndex = index("torque");
+  const transmisionIndex = index("transmision");
+  const traccionIndex = index("traccion");
+
+  let out = "";
+
+  rows.forEach(row => {
+
+    const version = versionIndex !== -1 ? row[versionIndex] : "";
+    const categoria = categoriaIndex !== -1 ? row[categoriaIndex] : "";
+    const dato = datoIndex !== -1 ? row[datoIndex] : "";
+    const potencia = potenciaIndex !== -1 ? row[potenciaIndex] : "";
+    const torque = torqueIndex !== -1 ? row[torqueIndex] : "";
+    const transmision = transmisionIndex !== -1 ? row[transmisionIndex] : "";
+    const traccion = traccionIndex !== -1 ? row[traccionIndex] : "";
+
+    if(categoria && dato){
+      out += "• "+categoria+": "+dato+"\n";
+    }
+
+    if(potencia) out += "• Potencia: "+potencia+"\n";
+    if(torque) out += "• Torque: "+torque+"\n";
+    if(transmision) out += "• Transmisión: "+transmision+"\n";
+    if(traccion) out += "• Tracción: "+traccion+"\n";
+    if(version) out += "  Versiones: "+version+"\n";
+
+    out += "\n";
+  });
+
+  return out.trim();
+}
+
+  const DATA = {
+    
 "CR-V":{
   intro:"5 pasajeros. La CR-V 2026 tiene versiones Turbo y Hybrid.",
   versions:[
